@@ -11,6 +11,19 @@
     --font-sans:
         'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
+    /* Primary Colors */
+    --color-blue-50: oklch(0.982 0.014 207.88);
+    --color-blue-100: oklch(0.9624 0.0306 206.71);
+    --color-blue-200: oklch(0.9216 0.0568 211.49);
+    --color-blue-300: oklch(0.8599 0.078 217.83);
+    --color-blue-400: oklch(0.7904 0.0914 226.53);
+    --color-blue-500: oklch(0.6971 0.1132 235.71);
+    --color-blue-600: oklch(0.5909 0.1125 243.4);
+    --color-blue-700: oklch(0.4914 0.1098 249.2);
+    --color-blue-800: oklch(0.3972 0.1057 254.74);
+    --color-blue-900: oklch(0.3262 0.1033 258.86);
+    --color-blue-950: oklch(0.2573 0.0755 259.02);
+
     --color-background: var(--background);
     --color-foreground: var(--foreground);
 
@@ -75,14 +88,14 @@
 
 :root {
     --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
+    --foreground: oklch(0 0 0);
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.145 0 0);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.5909 0.1125 243.4);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
+    --primary: var(--color-blue-600);
+    --primary-foreground: oklch(98.4% 0.003 247.858);
+    --secondary: oklch(96.8% 0.007 247.896);
     --secondary-foreground: oklch(0.205 0 0);
     --muted: oklch(0.97 0 0);
     --muted-foreground: oklch(0.556 0 0);
