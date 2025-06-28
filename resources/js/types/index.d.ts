@@ -1,11 +1,17 @@
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
 
-export interface Auth {
-    user: User | null;
-    role: Role | null;
-    isAuthenticated: boolean;
-}
+export type Auth =
+    | {
+          user: User | null;
+          role: Role | null;
+          isAuthenticated: false;
+      }
+    | {
+          user: User;
+          role: Role;
+          isAuthenticated: true;
+      };
 
 export interface BreadcrumbItem {
     title: string;

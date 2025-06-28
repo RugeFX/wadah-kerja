@@ -40,7 +40,7 @@ export default function Home() {
             <Navbar />
             <main>
                 <section id="hero" className="w-full bg-gradient-to-b from-blue-900 to-blue-600">
-                    <div className="relative flex h-full min-h-[768px] w-full items-center overflow-hidden">
+                    <div className="relative flex h-svh max-h-[860px] min-h-[568px] w-full items-center overflow-hidden">
                         <div className="absolute inset-0 z-0 size-full">
                             <img
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/b62438f2f6eab49d871a23899eea2f4a71c26951?placeholderIfAbsent=true"
@@ -100,9 +100,13 @@ function Navbar({ className }: { className?: ClassValue }) {
     }, []);
 
     return (
-        <nav className={cn('fixed top-4 left-1/2 z-10 w-full max-w-screen-md -translate-x-1/2 px-6', className)}>
+        <nav className="fixed top-4 left-1/2 z-10 w-full max-w-screen-md -translate-x-1/2 px-6">
             <div
-                className={cn('flex items-center gap-7 rounded-full px-2 py-1.5 transition-colors', scrollY > 100 ? 'bg-blue-900' : 'bg-transparent')}
+                className={cn(
+                    'flex items-center gap-7 rounded-full px-2 py-1.5 transition-colors',
+                    scrollY > 100 ? 'bg-blue-900' : 'bg-transparent',
+                    className,
+                )}
             >
                 <Link className="block shrink-0" href={route('home')}>
                     <AppLogoIcon className="ml-2 h-6 w-auto fill-background" />
@@ -120,7 +124,11 @@ function Navbar({ className }: { className?: ClassValue }) {
                         <>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="text-background hover:bg-transparent hover:text-background hover:opacity-80">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="text-background hover:bg-transparent hover:text-background hover:opacity-80"
+                                    >
                                         <BellIcon className="size-5" />
                                     </Button>
                                 </DropdownMenuTrigger>
@@ -144,9 +152,9 @@ function Navbar({ className }: { className?: ClassValue }) {
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Avatar className="size-8 overflow-hidden rounded-full">
-                                        <AvatarImage src={auth.user!.avatar} alt={auth.user!.name} />
+                                        <AvatarImage src={auth.user.avatar} alt={auth.user.name} />
                                         <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                                            {getInitials(auth.user!.name)}
+                                            {getInitials(auth.user.name)}
                                         </AvatarFallback>
                                     </Avatar>
                                 </DropdownMenuTrigger>
@@ -155,7 +163,7 @@ function Navbar({ className }: { className?: ClassValue }) {
                                     align="end"
                                     side="bottom"
                                 >
-                                    <UserMenuContent user={auth.user!} />
+                                    <UserMenuContent user={auth.user} />
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </>
