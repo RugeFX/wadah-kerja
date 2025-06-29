@@ -13,7 +13,7 @@ interface UserMenuProps {
 }
 
 export function UserMenu({ user, isAuthenticated }: UserMenuProps) {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !user) {
         return (
             <div className="hidden sm:flex sm:items-center sm:gap-x-2">
                 <Button variant="ghost" className="text-background hover:bg-white/10 hover:text-white" asChild>
@@ -41,6 +41,7 @@ export function UserMenu({ user, isAuthenticated }: UserMenuProps) {
                         </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    {/* TODO: Still placeholder data */}
                     <div className="py-8 text-center text-muted-foreground">
                         <BellIcon className="mx-auto mb-2 size-8 opacity-50" />
                         <p className="text-sm">Belum ada notifikasi</p>
@@ -50,14 +51,14 @@ export function UserMenu({ user, isAuthenticated }: UserMenuProps) {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Avatar className="size-9 cursor-pointer overflow-hidden rounded-full ring-2 ring-white/20 transition-all hover:ring-white/40">
-                        <AvatarImage src={user!.avatar} alt={user!.name} />
+                        <AvatarImage src={user.avatar} alt={user.name} />
                         <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                            {user!.name ? getInitials(user!.name) : ''}
+                            {user.name ? getInitials(user.name) : ''}
                         </AvatarFallback>
                     </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg" align="end" side="bottom">
-                    <UserMenuContent user={user!} />
+                    <UserMenuContent user={user} />
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>

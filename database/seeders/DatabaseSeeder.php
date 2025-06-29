@@ -16,11 +16,15 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RoleSeeder::class,
+            UserSeeder::class,
+            SkillSeeder::class,
+            BusinessProfileSeeder::class,
+            WorkerProfileSeeder::class,
+            ListingSeeder::class,
+            ProposalSeeder::class,
+            ListingAssignmentSeeder::class,
+            PortfolioItemSeeder::class,
+            ReviewSeeder::class,
         ]);
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ])->assignRole(\App\Enums\RolesEnum::ADMIN);
     }
 }

@@ -14,9 +14,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('worker_skills', function (Blueprint $table) {
-            $table->foreignIdFor(WorkerProfile::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Skill::class)->constrained()->onDelete('cascade');
-            $table->primary(['worker_id', 'skill_id']);
+            $table->foreignIdFor(WorkerProfile::class, 'worker_profile_id')->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Skill::class, 'skill_id')->constrained()->onDelete('cascade');
+            $table->primary(['worker_profile_id', 'skill_id']);
         });
     }
 

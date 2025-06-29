@@ -11,11 +11,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('jobs', function (Blueprint $table) {
+        Schema::create('listings', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(BusinessProfile::class)->constrained()->onDelete('cascade');
 
-            $table->enum('job_type', ['PROJECT', 'TIME_BASED'])->default('PROJECT');
+            $table->enum('listing_type', ['PROJECT', 'TIME_BASED'])->default('PROJECT');
 
             $table->string('title');
             $table->text('description');
@@ -38,6 +38,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('jobs');
+        Schema::dropIfExists('listings');
     }
 };

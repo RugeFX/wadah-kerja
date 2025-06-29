@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Listing extends Model
+{
+    use HasFactory;
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'deadline' => 'date',
+        ];
+    }
+
+    /**
+     * Get the business profile that owns the project.
+     */
+    public function businessProfile(): BelongsTo
+    {
+        return $this->belongsTo(BusinessProfile::class);
+    }
+
+    /**
+     * The skills required for the project.
+     */
+    public function skills(): BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class, 'listing_skills');
+    }
+
+    /**
+     * Get the proposals for the project.
+     */
+    public function proposals(): HasMany
+    {
+        return $this->hasMany(Proposal::class);
+    }
+
+    /**
+     * Get the reviews for the project.
+     */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Get all assignments for the job, including historical ones.
+     */
+    public function assignments(): HasMany
+    {
+        return $this->hasMany(ListingAssignment::class);
+    }
+
+    /**
+     * Get only the currently active assignment for the job.
+     */
+    public function activeAssignment()
+    {
+        return $this->hasOne(ListingAssignment::class)->where('status', 'ACTIVE');
+    }
+}
