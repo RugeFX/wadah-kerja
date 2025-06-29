@@ -7,7 +7,7 @@ namespace App\Enums;
 enum RolesEnum: string
 {
     case ADMIN = 'admin';
-    case USER = 'user';
+    case WORKER = 'worker';
     case BUSINESS = 'business';
 
     // extra helper to allow for greater customization of displayed values, without disclosing the name/value data directly
@@ -15,7 +15,7 @@ enum RolesEnum: string
     {
         return match ($this) {
             static::ADMIN => 'Admin',
-            static::USER => 'User',
+            static::WORKER => 'Worker',
             static::BUSINESS => 'Business',
         };
     }
