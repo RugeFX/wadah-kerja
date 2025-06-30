@@ -38,9 +38,9 @@ class RegisteredUserController extends Controller
     {
         $validated = $request->validated();
 
-        $account_type = RolesEnum::tryFrom($validated['account_type']);
+        $accountType = RolesEnum::tryFrom($validated['account_type']);
 
-        if ($account_type !== RolesEnum::BUSINESS && $account_type !== RolesEnum::WORKER)
+        if ($accountType !== RolesEnum::BUSINESS && $accountType !== RolesEnum::WORKER)
             return redirect()->back()->withErrors(['account_type' => 'Invalid account type']);
 
         DB::beginTransaction();
@@ -52,7 +52,7 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($request->input('password')),
             ]);
 
-            if ($account_type === RolesEnum::BUSINESS) {
+            if ($accountType === RolesEnum::BUSINESS) {
                 BusinessProfile::create([
                     'user_id' => $user->id,
                     'company_name' => $request->input('company_name'),
