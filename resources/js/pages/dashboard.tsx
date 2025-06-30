@@ -41,7 +41,7 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ users, statistics }: DashboardProps) {
-    const { auth } = usePage<SharedData>().props;
+    const { auth } = usePage<SharedData<true>>().props;
 
     return (
         <AppLayout>
@@ -53,7 +53,7 @@ export default function Dashboard({ users, statistics }: DashboardProps) {
                     {/* User Greeting */}
                     <div className="mb-8">
                         <h1 className="text-3xl font-bold text-white">
-                            Selamat {getCurrentTimeOfDay()}, {auth.user?.name?.split(' ')[0]} 👋
+                            Selamat {getCurrentTimeOfDay()}, {auth.user.name.split(' ')[0]} 👋
                         </h1>
                         <p className="mt-2 text-blue-100">Selamat datang kembali di dasbor Anda. Berikut ringkasan aktivitas platform hari ini.</p>
                     </div>

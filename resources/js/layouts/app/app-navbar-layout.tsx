@@ -18,9 +18,10 @@ export default function AppNavbarLayout({ children }: PropsWithChildren) {
                 <div className="relative">
                     <AppNavbar />
                     <main>{children}</main>
-                    <AppFooter />
                 </div>
             </div>
+
+            <AppFooter className="relative" />
         </AppShell>
     );
 }

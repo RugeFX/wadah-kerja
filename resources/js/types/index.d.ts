@@ -1,16 +1,16 @@
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
 
-export type Auth =
-    | {
-          user: User | null;
-          role: Role | null;
-          isAuthenticated: false;
-      }
-    | {
+export type Auth<Authed = false> = Authed extends true
+    ? {
           user: User;
           role: Role;
           isAuthenticated: true;
+      }
+    : {
+          user: User | null;
+          role: Role | null;
+          isAuthenticated: boolean;
       };
 
 export interface BreadcrumbItem {
@@ -30,10 +30,10 @@ export interface NavItem {
     isActive?: boolean;
 }
 
-export interface SharedData {
+export interface SharedData<Authed = false> {
     name: string;
     quote: { message: string; author: string };
-    auth: Auth;
+    auth: Auth<Authed>;
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
     [key: string]: unknown;
