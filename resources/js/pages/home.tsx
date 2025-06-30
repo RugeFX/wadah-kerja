@@ -118,7 +118,7 @@ export default function Home() {
     return (
         <>
             <Head title="Home" />
-            <AppNavbar />
+            <AppNavbar variant="home" />
             <main>
                 <section id="hero" className="w-full bg-gradient-to-b from-blue-950 to-blue-700">
                     <div className="relative flex h-svh max-h-[900px] min-h-[600px] w-full items-center justify-center overflow-hidden text-center text-white">

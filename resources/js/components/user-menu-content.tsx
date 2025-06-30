@@ -1,19 +1,20 @@
 import { Link, router } from '@inertiajs/react';
-import { LogOutIcon, SettingsIcon } from 'lucide-react';
+import { LayoutDashboardIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
 
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { cn, getInitials } from '@/lib/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { type User } from '@/types';
+import type { Role, User } from '@/types';
 import { buttonVariants } from './ui/button';
 
 interface UserMenuContentProps {
     user: User;
+    role: Role;
 }
 
-export function UserMenuContent({ user }: UserMenuContentProps) {
+export function UserMenuContent({ user, role }: UserMenuContentProps) {
     const cleanup = useMobileNavigation();
 
     const handleLogout = () => {
@@ -37,9 +38,24 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup className="space-y-2 p-1">
+                {/* TODO: Make role enum? */}
+                {role.name === 'admin' && (
+                    <DropdownMenuItem
+                        asChild
+                        className={cn(
+                            buttonVariants({ variant: 'ghost' }),
+                            'w-full justify-start gap-3 bg-transparent text-blue-600 ring-blue-600/20! hover:bg-blue-50! hover:text-blue-700!',
+                        )}
+                    >
+                        <Link href={route('dashboard')} as="button" prefetch onClick={cleanup}>
+                            <LayoutDashboardIcon className="size-5 text-blue-600" />
+                            <span>Dashboard</span>
+                        </Link>
+                    </DropdownMenuItem>
+                )}
                 <DropdownMenuItem
                     asChild
-                    className={cn(buttonVariants({ variant: 'ghost' }), 'bobg-transparent w-full justify-start gap-3 hover:bg-accent')}
+                    className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start gap-3 bg-transparent hover:bg-accent')}
                 >
                     <Link href={route('profile.edit')} as="button" prefetch onClick={cleanup}>
                         <SettingsIcon className="size-5" />
@@ -49,8 +65,8 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
                 <DropdownMenuItem
                     asChild
                     className={cn(
-                        buttonVariants({ variant: 'outline' }),
-                        'w-full justify-start gap-3 border-red-400/30 bg-transparent text-red-400 hover:border-red-400/80! hover:bg-red-400/10! hover:text-red-500!',
+                        buttonVariants({ variant: 'ghost' }),
+                        'w-full justify-start gap-3 bg-transparent text-red-400 ring-red-400/30! hover:border-red-400/80! hover:bg-red-400/10! hover:text-red-500!',
                     )}
                 >
                     <Link method="post" href={route('logout')} as="button" onClick={handleLogout}>

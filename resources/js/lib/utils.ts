@@ -11,3 +11,11 @@ export function getInitials(name: string) {
         .map((n) => n[0])
         .join('');
 }
+
+export function getCurrentTimeOfDay() {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'pagi';
+    if (hour < 15) return 'siang';
+    if (hour < 18) return 'sore';
+    return 'malam';
+}

@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { ClassValue } from 'clsx';
-import { MenuIcon, XIcon } from 'lucide-react';
+import { BellIcon, MenuIcon, XIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -11,8 +11,9 @@ import type { SharedData } from '@/types';
 import AppLogoIcon from './app-logo-icon';
 import { MobileMenu } from './navbar/mobile-menu';
 import { UserMenu } from './navbar/user-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 
-export default function AppNavbar({ className }: { className?: ClassValue }) {
+export default function AppNavbar({ className, variant = 'default' }: { className?: ClassValue; variant?: 'default' | 'home' }) {
     const { auth } = usePage<SharedData>().props;
 
     const [isScrolled, setIsScrolled] = useState(() => window.scrollY > 50);
@@ -37,9 +38,11 @@ export default function AppNavbar({ className }: { className?: ClassValue }) {
                 <div
                     className={cn(
                         'flex items-center justify-between rounded-full ring-1 ring-transparent transition-all duration-300 ease-in-out',
-                        isScrolled || isMobileMenuOpen
-                            ? 'bg-blue-900/80 px-4 py-2 shadow-lg ring-white/10 backdrop-blur-md'
-                            : 'bg-transparent px-2 py-1',
+                        variant === 'home'
+                            ? isScrolled || isMobileMenuOpen
+                                ? 'bg-blue-900/80 px-4 py-2 shadow-lg ring-white/10 backdrop-blur-md'
+                                : 'bg-transparent px-2 py-1'
+                            : 'bg-blue-900/80 px-4 py-2 shadow-lg ring-white/10 backdrop-blur-md',
                         className,
                     )}
                 >
@@ -62,7 +65,28 @@ export default function AppNavbar({ className }: { className?: ClassValue }) {
 
                     {/* Auth & Actions */}
                     <div className="flex flex-shrink-0 items-center justify-end gap-x-2">
-                        <UserMenu isAuthenticated={auth.isAuthenticated} user={auth.user} />
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon" className="rounded-full text-background hover:bg-white/10 hover:text-background">
+                                    <BellIcon className="size-5" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width) min-w-80 rounded-lg" align="end" side="bottom">
+                                <DropdownMenuLabel className="p-0 font-normal">
+                                    <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                                        <h3 className="font-semibold">Notifikasi</h3>
+                                    </div>
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                {/* TODO: Still placeholder data */}
+                                <div className="py-8 text-center text-muted-foreground">
+                                    <BellIcon className="mx-auto mb-2 size-8 opacity-50" />
+                                    <p className="text-sm">Belum ada notifikasi</p>
+                                </div>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+
+                        <UserMenu isAuthenticated={auth.isAuthenticated} user={auth.user} role={auth.role} />
 
                         {/* Hamburger Menu Button */}
                         <div className="sm:hidden">
@@ -82,6 +106,7 @@ export default function AppNavbar({ className }: { className?: ClassValue }) {
                         onClose={() => setIsMobileMenuOpen(false)}
                         isAuthenticated={auth.isAuthenticated}
                         user={auth.user}
+                        role={auth.role}
                     />
                 </CollapsibleContent>
             </nav>

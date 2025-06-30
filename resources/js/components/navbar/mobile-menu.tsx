@@ -1,19 +1,20 @@
 import { Link } from '@inertiajs/react';
-import { LogOutIcon, SettingsIcon } from 'lucide-react';
+import { LayoutDashboardIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { buttonVariants } from '@/components/ui/button';
 import { cn, getInitials } from '@/lib/utils';
-import type { User } from '@/types';
+import type { Role, User } from '@/types';
 
 interface MobileMenuProps {
     isOpen: boolean;
     onClose: () => void;
     isAuthenticated: boolean;
     user: User | null;
+    role: Role | null;
 }
 
-export function MobileMenu({ isOpen, onClose, isAuthenticated, user }: MobileMenuProps) {
+export function MobileMenu({ isOpen, onClose, isAuthenticated, user, role }: MobileMenuProps) {
     return (
         <div
             className={cn(
@@ -45,7 +46,7 @@ export function MobileMenu({ isOpen, onClose, isAuthenticated, user }: MobileMen
             </div>
 
             <div className="!mt-4 border-t border-blue-800/50 pt-4">
-                {isAuthenticated && user ? (
+                {isAuthenticated && user && role ? (
                     <div className="space-y-4">
                         <div className="flex items-center gap-3 px-3">
                             <Avatar className="size-10">
@@ -58,6 +59,20 @@ export function MobileMenu({ isOpen, onClose, isAuthenticated, user }: MobileMen
                             </div>
                         </div>
                         <div className="space-y-2">
+                            {/* TODO: Make role enum? */}
+                            {role.name === 'admin' && (
+                                <Link
+                                    href={route('dashboard')}
+                                    className={cn(
+                                        buttonVariants({ variant: 'outline' }),
+                                        'w-full justify-start gap-3 border-white/20 bg-transparent text-blue-100 hover:bg-white/10 hover:text-white',
+                                    )}
+                                    onClick={onClose}
+                                >
+                                    <LayoutDashboardIcon className="size-5" />
+                                    <span>Dashboard</span>
+                                </Link>
+                            )}
                             <Link
                                 href={route('profile.edit')}
                                 className={cn(
