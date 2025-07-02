@@ -184,8 +184,8 @@ export default function ListingsPage({ listings, skills, filters }: ListingsPage
                     {/* Expandable Filters */}
                     <div
                         className={cn(
-                            'overflow-hidden rounded-lg border bg-card shadow-sm',
-                            isFilterVisible ? 'my-4 h-auto opacity-100' : 'h-0 opacity-0',
+                            'overflow-hidden rounded-lg border border-blue-600 bg-card shadow-sm',
+                            isFilterVisible ? 'my-4 h-auto opacity-100' : 'hidden h-0 opacity-0',
                         )}
                     >
                         <div className="grid gap-6 p-6 sm:grid-cols-2">
@@ -233,23 +233,37 @@ export default function ListingsPage({ listings, skills, filters }: ListingsPage
                             {/* Skills Filter */}
                             <div className="col-span-full space-y-4">
                                 <h4 className="font-medium">Keahlian</h4>
-                                <div className="max-h-[200px] space-y-2 overflow-y-auto rounded-md border bg-background p-4">
+                                <div className="max-h-[200px] space-y-2 overflow-y-auto rounded-md border bg-background p-2">
                                     {skills.map((skill) => (
-                                        <div key={skill.id} className="flex items-center space-x-2">
+                                        <div
+                                            key={skill.id}
+                                            className={cn(
+                                                'flex shrink-0 cursor-pointer items-center gap-2 rounded-full border px-4 py-2 transition-colors',
+                                                selectedSkills.includes(skill.id)
+                                                    ? 'border-blue-600 bg-blue-50 text-blue-600'
+                                                    : 'border-transparent bg-muted/50 hover:bg-muted',
+                                            )}
+                                            onClick={() => {
+                                                if (selectedSkills.includes(skill.id)) {
+                                                    setSelectedSkills(selectedSkills.filter((id) => id !== skill.id));
+                                                } else {
+                                                    setSelectedSkills([...selectedSkills, skill.id]);
+                                                }
+                                            }}
+                                        >
                                             <Checkbox
                                                 id={`skill-${skill.id}`}
                                                 checked={selectedSkills.includes(skill.id)}
-                                                onCheckedChange={(checked) => {
-                                                    if (checked) {
-                                                        setSelectedSkills([...selectedSkills, skill.id]);
-                                                    } else {
-                                                        setSelectedSkills(selectedSkills.filter((id) => id !== skill.id));
-                                                    }
-                                                }}
+                                                className={cn(
+                                                    'size-4 rounded-full border-none transition-colors',
+                                                    selectedSkills.includes(skill.id)
+                                                        ? 'bg-blue-600 text-white'
+                                                        : 'bg-background data-[state=checked]:bg-blue-600 data-[state=checked]:text-white',
+                                                )}
                                             />
                                             <label
                                                 htmlFor={`skill-${skill.id}`}
-                                                className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                className="text-sm leading-none font-medium select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                             >
                                                 {skill.name}
                                             </label>
