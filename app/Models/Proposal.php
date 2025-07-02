@@ -13,7 +13,7 @@ class Proposal extends Model
     /**
      * Get the listing that the proposal belongs to.
      */
-    public function listing(): BelongsTo
+    public function listing()
     {
         return $this->belongsTo(Listing::class);
     }
@@ -21,7 +21,7 @@ class Proposal extends Model
     /**
      * Get the worker that sent the proposal.
      */
-    public function workerProfile(): BelongsTo
+    public function workerProfile()
     {
         return $this->belongsTo(WorkerProfile::class);
     }

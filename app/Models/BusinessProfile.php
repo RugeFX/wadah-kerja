@@ -14,7 +14,7 @@ class BusinessProfile extends Model
     /**
      * Get the user that owns the business profile.
      */
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
@@ -22,7 +22,7 @@ class BusinessProfile extends Model
     /**
      * Get the listings for the business profile.
      */
-    public function listings(): HasMany
+    public function listings()
     {
         return $this->hasMany(Listing::class);
     }

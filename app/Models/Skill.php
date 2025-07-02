@@ -13,7 +13,7 @@ class Skill extends Model
     /**
      * The workers that have this skill.
      */
-    public function workers(): BelongsToMany
+    public function workers()
     {
         return $this->belongsToMany(WorkerProfile::class, 'worker_skills');
     }
@@ -21,7 +21,7 @@ class Skill extends Model
     /**
      * The listings that require this skill.
      */
-    public function listings(): BelongsToMany
+    public function listings()
     {
         return $this->belongsToMany(Listing::class, 'listing_skills');
     }

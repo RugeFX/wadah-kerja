@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\RolesEnum;
 use App\Models\User;
+use App\Models\Skill;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
@@ -32,6 +33,12 @@ class RegisterUserRequest extends FormRequest
             'headline' => ['nullable', 'required_if:account_type,' . RolesEnum::WORKER->value, 'string', 'max:255'],
             'worker_location' => ['nullable', 'required_if:account_type,' . RolesEnum::WORKER->value, 'string', 'max:255'],
             'bio' => ['nullable', 'required_if:account_type,' . RolesEnum::WORKER->value, 'string', 'max:1000'],
+
+            // Skills (required for workers)
+            'skill_ids' => ['nullable', 'required_if:account_type,' . RolesEnum::WORKER->value, 'array'],
+            'skill_ids.*' => ['exists:' . Skill::class . ',id'],
+            'custom_skills' => ['nullable', 'array'],
+            'custom_skills.*' => ['string', 'max:255'],
         ];
     }
 }

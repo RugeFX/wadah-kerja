@@ -21,7 +21,7 @@ class ListingAssignment extends Model
     /**
      * Get the listing that the assignment belongs to.
      */
-    public function listing(): BelongsTo
+    public function listing()
     {
         return $this->belongsTo(Listing::class);
     }
@@ -29,7 +29,7 @@ class ListingAssignment extends Model
     /**
      * Get the worker profile that the assignment belongs to.
      */
-    public function workerProfile(): BelongsTo
+    public function workerProfile()
     {
         return $this->belongsTo(WorkerProfile::class);
     }

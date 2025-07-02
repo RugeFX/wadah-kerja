@@ -27,7 +27,7 @@ class Listing extends Model
     /**
      * Get the business profile that owns the project.
      */
-    public function businessProfile(): BelongsTo
+    public function businessProfile()
     {
         return $this->belongsTo(BusinessProfile::class);
     }
@@ -35,7 +35,7 @@ class Listing extends Model
     /**
      * The skills required for the project.
      */
-    public function skills(): BelongsToMany
+    public function skills()
     {
         return $this->belongsToMany(Skill::class, 'listing_skills');
     }
@@ -43,7 +43,7 @@ class Listing extends Model
     /**
      * Get the proposals for the project.
      */
-    public function proposals(): HasMany
+    public function proposals()
     {
         return $this->hasMany(Proposal::class);
     }
@@ -51,7 +51,7 @@ class Listing extends Model
     /**
      * Get the reviews for the project.
      */
-    public function reviews(): HasMany
+    public function reviews()
     {
         return $this->hasMany(Review::class);
     }
@@ -59,7 +59,7 @@ class Listing extends Model
     /**
      * Get all assignments for the job, including historical ones.
      */
-    public function assignments(): HasMany
+    public function assignments()
     {
         return $this->hasMany(ListingAssignment::class);
     }

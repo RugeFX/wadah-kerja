@@ -13,7 +13,7 @@ class PortfolioItem extends Model
     /**
      * Get the worker profile that owns the portfolio item.
      */
-    public function workerProfile(): BelongsTo
+    public function workerProfile()
     {
         return $this->belongsTo(WorkerProfile::class);
     }

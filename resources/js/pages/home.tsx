@@ -147,7 +147,7 @@ export default function Home() {
 
                             <div className="mt-8 flex items-center gap-4 text-center text-sm font-medium delay-300 duration-700 animate-in fade-in slide-in-from-bottom-8">
                                 <Button size="lg" className="transition-transform hover:scale-105 active:scale-100" asChild>
-                                    <Link href="#">
+                                    <Link href={route('listings.index')}>
                                         <BriefcaseIcon className="mr-2 h-5 w-5" />
                                         Cari Lowongan
                                     </Link>

@@ -4,18 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class WorkerProfile extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'average_rating' => 'float',
+    ];
+
     /**
      * Get the user that owns the worker profile.
      */
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
@@ -23,7 +24,7 @@ class WorkerProfile extends Model
     /**
      * Get the portfolio items for the worker profile.
      */
-    public function portfolioItems(): HasMany
+    public function portfolioItems()
     {
         return $this->hasMany(PortfolioItem::class);
     }
@@ -31,7 +32,7 @@ class WorkerProfile extends Model
     /**
      * The skills that belong to the worker.
      */
-    public function skills(): BelongsToMany
+    public function skills()
     {
         return $this->belongsToMany(Skill::class, 'worker_skills');
     }
@@ -39,7 +40,7 @@ class WorkerProfile extends Model
     /**
      * Get the proposals for the worker.
      */
-    public function proposals(): HasMany
+    public function proposals()
     {
         return $this->hasMany(Proposal::class);
     }
@@ -47,7 +48,7 @@ class WorkerProfile extends Model
     /**
      * Get all listing assignments for the worker.
      */
-    public function listingAssignments(): HasMany
+    public function listingAssignments()
     {
         return $this->hasMany(ListingAssignment::class);
     }

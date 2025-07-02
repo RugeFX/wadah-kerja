@@ -13,7 +13,7 @@ class Review extends Model
     /**
      * Get the listing associated with the review.
      */
-    public function listing(): BelongsTo
+    public function listing()
     {
         return $this->belongsTo(Listing::class);
     }
@@ -21,7 +21,7 @@ class Review extends Model
     /**
      * Get the user who wrote the review.
      */
-    public function reviewer(): BelongsTo
+    public function reviewer()
     {
         return $this->belongsTo(User::class, 'reviewer_id');
     }
@@ -29,7 +29,7 @@ class Review extends Model
     /**
      * Get the user who received the review.
      */
-    public function reviewee(): BelongsTo
+    public function reviewee()
     {
         return $this->belongsTo(User::class, 'reviewee_id');
     }

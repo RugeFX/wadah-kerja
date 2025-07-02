@@ -13,12 +13,12 @@ use App\Models\WorkerProfile;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class DashboardController extends Controller
+class AdminDashboardController extends Controller
 {
     public function __invoke(): Response
     {
         $users = User::latest()->take(10)->get();
-        
+
         $statistics = [
             'totalUsers' => User::count(),
             'verifiedUsers' => User::whereNotNull('email_verified_at')->count(),
@@ -37,4 +37,4 @@ class DashboardController extends Controller
 
         return Inertia::render('dashboard', compact('users', 'statistics'));
     }
-} 
+}

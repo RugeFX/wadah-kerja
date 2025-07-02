@@ -60,19 +60,17 @@ export function MobileMenu({ isOpen, onClose, isAuthenticated, user, role }: Mob
                         </div>
                         <div className="space-y-2">
                             {/* TODO: Make role enum? */}
-                            {role.name === 'admin' && (
-                                <Link
-                                    href={route('dashboard')}
-                                    className={cn(
-                                        buttonVariants({ variant: 'outline' }),
-                                        'w-full justify-start gap-3 border-white/20 bg-transparent text-blue-100 hover:bg-white/10 hover:text-white',
-                                    )}
-                                    onClick={onClose}
-                                >
-                                    <LayoutDashboardIcon className="size-5" />
-                                    <span>Dashboard</span>
-                                </Link>
-                            )}
+                            <Link
+                                href={route(`${role.name}.dashboard`)}
+                                className={cn(
+                                    buttonVariants({ variant: 'outline' }),
+                                    'w-full justify-start gap-3 border-white/20 bg-transparent text-blue-100 hover:bg-white/10 hover:text-white',
+                                )}
+                                onClick={onClose}
+                            >
+                                <LayoutDashboardIcon className="size-5" />
+                                <span>Dashboard</span>
+                            </Link>
                             <Link
                                 href={route('profile.edit')}
                                 className={cn(

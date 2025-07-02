@@ -54,7 +54,10 @@ export default function AppNavbar({ className, variant = 'default' }: { classNam
 
                         {/* Nav Links */}
                         <div className="hidden items-center gap-x-2 text-sm font-medium text-blue-100 sm:flex lg:gap-x-4">
-                            <Link href={route('home')} className="rounded-full px-4 py-2 transition-colors hover:bg-white/10 hover:text-white">
+                            <Link
+                                href={route('listings.index')}
+                                className="rounded-full px-4 py-2 transition-colors hover:bg-white/10 hover:text-white"
+                            >
                                 Cari Lowongan
                             </Link>
                             <Link href={route('home')} className="rounded-full px-4 py-2 transition-colors hover:bg-white/10 hover:text-white">

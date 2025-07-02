@@ -39,20 +39,18 @@ export function UserMenuContent({ user, role }: UserMenuContentProps) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup className="space-y-2 p-1">
                 {/* TODO: Make role enum? */}
-                {role.name === 'admin' && (
-                    <DropdownMenuItem
-                        asChild
-                        className={cn(
-                            buttonVariants({ variant: 'ghost' }),
-                            'w-full justify-start gap-3 bg-transparent text-blue-600 ring-blue-600/20! hover:bg-blue-50! hover:text-blue-700!',
-                        )}
-                    >
-                        <Link href={route('dashboard')} as="button" prefetch onClick={cleanup}>
-                            <LayoutDashboardIcon className="size-5 text-blue-600" />
-                            <span>Dashboard</span>
-                        </Link>
-                    </DropdownMenuItem>
-                )}
+                <DropdownMenuItem
+                    asChild
+                    className={cn(
+                        buttonVariants({ variant: 'ghost' }),
+                        'w-full justify-start gap-3 bg-transparent text-blue-600 ring-blue-600/20! hover:bg-blue-50! hover:text-blue-700!',
+                    )}
+                >
+                    <Link href={route(`${role.name}.dashboard`)} as="button" prefetch onClick={cleanup}>
+                        <LayoutDashboardIcon className="size-5 text-blue-600" />
+                        <span>Dashboard</span>
+                    </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem
                     asChild
                     className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start gap-3 bg-transparent hover:bg-accent')}

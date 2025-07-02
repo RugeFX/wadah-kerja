@@ -6,17 +6,14 @@ use App\Enums\RolesEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterUserRequest;
 use App\Models\BusinessProfile;
+use App\Models\Skill;
 use App\Models\User;
 use App\Models\WorkerProfile;
 use DB;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules;
-use Illuminate\Validation\ValidationException;
 use Inertia\Response;
 
 class RegisteredUserController extends Controller
@@ -26,7 +23,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return inertia('auth/register');
+        $skills = Skill::orderBy('name')->get();
+        return inertia('auth/register', compact('skills'));
     }
 
     /**
@@ -61,12 +59,24 @@ class RegisteredUserController extends Controller
                 ]);
                 $user->assignRole(RolesEnum::BUSINESS);
             } else {
-                WorkerProfile::create([
+                $workerProfile = WorkerProfile::create([
                     'user_id' => $user->id,
                     'headline' => $request->input('headline'),
                     'location' => $request->input('worker_location'),
                     'bio' => $request->input('bio'),
                 ]);
+
+                if ($request->has('skill_ids')) {
+                    $workerProfile->skills()->attach($request->input('skill_ids'));
+                }
+
+                if ($request->has('custom_skills')) {
+                    foreach ($request->input('custom_skills') as $skillName) {
+                        $skill = Skill::firstOrCreate(['name' => $skillName]);
+                        $workerProfile->skills()->attach($skill->id);
+                    }
+                }
+
                 $user->assignRole(RolesEnum::WORKER);
             }
 
@@ -76,7 +86,7 @@ class RegisteredUserController extends Controller
 
             Auth::login($user);
 
-            return redirect()->intended(route('dashboard', absolute: false));
+            return redirect()->intended(route($accountType === RolesEnum::BUSINESS ? 'business.dashboard' : 'worker.dashboard', absolute: false));
         } catch (\Exception $e) {
             DB::rollBack();
 

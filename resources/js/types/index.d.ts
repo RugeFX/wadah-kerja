@@ -1,6 +1,28 @@
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
 
+interface PaginationLink {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
+export interface PaginationData<T> {
+    data: T[];
+    current_page: number;
+    first_page_url: string;
+    from: number;
+    last_page: number;
+    last_page_url: string;
+    links: PaginationLink[];
+    next_page_url: string | null;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number;
+    total: number;
+}
+
 export type Auth<Authed = false> = Authed extends true
     ? {
           user: User;
@@ -55,3 +77,66 @@ export interface Role {
     name: string;
     [key: string]: unknown;
 }
+
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    email_verified_at: string | null;
+}
+
+export interface Skill {
+    id: number;
+    name: string;
+}
+
+export interface BusinessProfile {
+    id: number;
+    user_id: number;
+    company_name: string;
+    description: string | null;
+    website: string | null;
+    location: string | null;
+}
+
+export interface WorkerProfile {
+    id: number;
+    user_id: number;
+    bio: string | null;
+    location: string | null;
+    average_rating: number;
+    completed_projects_count: number;
+}
+
+export interface WorkerProfileWithRelations extends WorkerProfile {
+    user: User;
+    skills: Skill[];
+}
+
+export interface BaseListing {
+    id: number;
+    business_profile_id: number;
+    title: string;
+    description: string;
+    status: 'OPEN' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+    location: string;
+    business_profile: BusinessProfile;
+    skills: Skill[];
+    proposals: Proposal[];
+}
+
+export interface ProjectListing extends BaseListing {
+    listing_type: 'PROJECT';
+    project_budget_min: number;
+    project_budget_max: number;
+}
+
+export interface TimeBasedListing extends BaseListing {
+    listing_type: 'TIME_BASED';
+    rate_type: 'HOURLY' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
+    rate_amount: number;
+    start_datetime: string;
+    end_datetime: string;
+}
+
+export type Listing = ProjectListing | TimeBasedListing;

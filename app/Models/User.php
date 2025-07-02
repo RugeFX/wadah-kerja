@@ -2,10 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -52,7 +49,7 @@ class User extends Authenticatable
     /**
      * Get the business profile associated with the user.
      */
-    public function businessProfile(): HasOne
+    public function businessProfile()
     {
         return $this->hasOne(BusinessProfile::class);
     }
@@ -60,7 +57,7 @@ class User extends Authenticatable
     /**
      * Get the worker profile associated with the user.
      */
-    public function workerProfile(): HasOne
+    public function workerProfile()
     {
         return $this->hasOne(WorkerProfile::class);
     }
@@ -68,7 +65,7 @@ class User extends Authenticatable
     /**
      * Get the reviews written by the user.
      */
-    public function reviewsGiven(): HasMany
+    public function reviewsGiven()
     {
         return $this->hasMany(Review::class, 'reviewer_id');
     }
@@ -76,7 +73,7 @@ class User extends Authenticatable
     /**
      * Get the reviews received by the user.
      */
-    public function reviewsReceived(): HasMany
+    public function reviewsReceived()
     {
         return $this->hasMany(Review::class, 'reviewee_id');
     }

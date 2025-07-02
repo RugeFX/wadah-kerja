@@ -19,3 +19,10 @@ export function getCurrentTimeOfDay() {
     if (hour < 18) return 'sore';
     return 'malam';
 }
+
+export function formatIDR(amount: number) {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+    }).format(amount);
+}

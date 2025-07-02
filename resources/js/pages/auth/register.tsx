@@ -1,6 +1,10 @@
 import { Head, useForm } from '@inertiajs/react';
 import { ArrowLeft, ArrowRight, Building2, LoaderCircle, UserCircle } from 'lucide-react';
 import { ChangeEvent, FormEventHandler, useState } from 'react';
+import type { MultiValue } from 'react-select';
+import CreatableSelect from 'react-select/creatable';
+
+import AuthLayout from '@/layouts/auth-layout';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -9,7 +13,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
-import AuthLayout from '@/layouts/auth-layout';
+import { cn } from '@/lib/utils';
+import type { Skill } from '@/types';
 
 type AccountType = 'business' | 'worker';
 
@@ -32,9 +37,17 @@ type RegisterForm = {
     headline?: string;
     bio?: string;
     worker_location?: string;
+
+    // Step 4: Skills
+    skill_ids: number[];
+    custom_skills: string[];
 };
 
-export default function Register() {
+interface RegisterProps {
+    skills: Skill[];
+}
+
+export default function Register({ skills }: RegisterProps) {
     const [step, setStep] = useState(1);
     const { data, setData, post, processing, errors } = useForm<RegisterForm>({
         name: '',
@@ -48,6 +61,8 @@ export default function Register() {
         headline: '',
         bio: '',
         worker_location: '',
+        skill_ids: [],
+        custom_skills: [],
     });
 
     const submit: FormEventHandler = (e) => {
@@ -297,13 +312,103 @@ export default function Register() {
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Kembali
                 </Button>
-                <Button type="submit" className="w-full" disabled={processing}>
-                    {processing && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
-                    Daftar
+                <Button type="button" onClick={nextStep} className="w-full">
+                    Lanjut
+                    <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
             </div>
         </div>
     );
+
+    const renderStep4Skills = () => {
+        const skillOptions = skills.map((skill) => ({
+            value: skill.id,
+            label: skill.name,
+        }));
+
+        const customOptions = data.custom_skills.map((skill) => ({
+            value: skill,
+            label: skill,
+        }));
+
+        const selectedOptions = [...skillOptions.filter((option) => data.skill_ids.includes(option.value)), ...customOptions];
+
+        const handleChange = (newValue: MultiValue<{ value: string | number; label: string; __isNew__?: boolean }>) => {
+            console.log(newValue);
+
+            const existingSkills = newValue.filter((v) => !v.__isNew__).map((v) => v.value as number);
+
+            const customSkills = newValue.filter((v) => v.__isNew__).map((v) => v.label as string);
+
+            setData({
+                ...data,
+                skill_ids: existingSkills,
+                custom_skills: customSkills,
+            });
+        };
+
+        return (
+            <div className="grid gap-6">
+                <div className="grid gap-2">
+                    <Label>Pilih Keahlian</Label>
+                    <p className="text-sm text-muted-foreground">
+                        Pilih keahlian yang Anda miliki dari daftar atau ketik untuk menambahkan keahlian baru
+                    </p>
+
+                    <CreatableSelect
+                        unstyled
+                        isMulti
+                        value={selectedOptions}
+                        options={skillOptions}
+                        onChange={handleChange}
+                        placeholder="Pilih atau ketik keahlian"
+                        noOptionsMessage={() => 'Ketik untuk menambahkan keahlian baru'}
+                        formatCreateLabel={(inputValue: string) => `Tambah "${inputValue}"`}
+                        classNames={{
+                            control: (state) =>
+                                cn(
+                                    'flex h-full w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+                                    'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
+                                    'aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
+                                    state.isFocused ? 'border-ring ring-1 ring-ring' : '',
+                                ),
+                            option: (state) =>
+                                cn(
+                                    'cursor-pointer px-3 py-1 hover:bg-accent hover:text-accent-foreground',
+                                    state.isSelected ? 'bg-accent text-accent-foreground' : 'bg-background',
+                                ),
+                            menu: () => 'bg-background border border-input',
+                            multiValue: () => 'bg-secondary rounded-full pl-2',
+                            multiValueLabel: () => 'text-secondary-foreground pr-1',
+                            multiValueRemove: () =>
+                                'bg-secondary rounded-full px-1 text-secondary-foreground hover:bg-destructive/20 hover:text-destructive',
+                            placeholder: () => 'text-muted-foreground',
+                            clearIndicator: () => 'text-destructive',
+                            valueContainer: () => 'gap-x-2 gap-y-1',
+                        }}
+                    />
+
+                    <InputError message={errors.skill_ids} />
+                    <InputError message={errors.custom_skills} />
+                </div>
+
+                <div className="flex gap-4">
+                    <Button type="button" variant="outline" onClick={prevStep} className="w-full">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Kembali
+                    </Button>
+                    <Button
+                        type="submit"
+                        className="w-full"
+                        disabled={processing || (data.skill_ids.length === 0 && data.custom_skills.length === 0)}
+                    >
+                        {processing && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+                        Daftar
+                    </Button>
+                </div>
+            </div>
+        );
+    };
 
     const renderCurrentStep = () => {
         switch (step) {
@@ -313,6 +418,8 @@ export default function Register() {
                 return renderStep2();
             case 3:
                 return data.account_type === 'business' ? renderStep3Business() : renderStep3Worker();
+            case 4:
+                return data.account_type === 'worker' ? renderStep4Skills() : renderStep3Business();
             default:
                 return null;
         }
