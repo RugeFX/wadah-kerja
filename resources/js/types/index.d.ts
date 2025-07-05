@@ -108,9 +108,17 @@ export interface WorkerProfile {
     completed_projects_count: number;
 }
 
+interface PortfolioItem {
+    id: number;
+    title: string;
+    description: string;
+    image_url?: string;
+}
+
 export interface WorkerProfileWithRelations extends WorkerProfile {
     user: User;
     skills: Skill[];
+    portfolio_items: PortfolioItem[];
 }
 
 export interface BaseListing {

@@ -24,7 +24,7 @@ export function MobileMenu({ isOpen, onClose, isAuthenticated, user, role }: Mob
         >
             <div className="space-y-1">
                 <Link
-                    href={route('home')}
+                    href={route('listings.index')}
                     className={cn(
                         buttonVariants({ variant: 'ghost' }),
                         'w-full justify-start text-base leading-7 font-semibold text-blue-100 hover:bg-white/10 hover:text-white',
@@ -34,7 +34,7 @@ export function MobileMenu({ isOpen, onClose, isAuthenticated, user, role }: Mob
                     Cari Lowongan
                 </Link>
                 <Link
-                    href={route('home')}
+                    href={route('talents.index')}
                     className={cn(
                         buttonVariants({ variant: 'ghost' }),
                         'w-full justify-start text-base leading-7 font-semibold text-blue-100 hover:bg-white/10 hover:text-white',

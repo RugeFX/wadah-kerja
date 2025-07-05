@@ -158,7 +158,7 @@ export default function Home() {
                                     className="border-white/50 bg-white/10 text-white backdrop-blur-sm transition-all hover:scale-105 hover:bg-white/20 active:scale-100"
                                     asChild
                                 >
-                                    <Link href="#">
+                                    <Link href={route('talents.index')}>
                                         <UsersIcon className="mr-2 h-5 w-5" />
                                         Cari Talenta
                                     </Link>
@@ -465,13 +465,17 @@ export default function Home() {
                             Bergabunglah dengan ribuan UMKM dan talenta lokal yang telah merasakan manfaat ekosistem WadahKerja
                         </p>
                         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                            <Button size="lg" variant="secondary" className="text-blue-900">
-                                Mulai Cari Talenta
-                                <ArrowRightIcon className="ml-2 h-4 w-4" />
+                            <Button size="lg" variant="secondary" className="text-blue-900" asChild>
+                                <Link href={route('talents.index')}>
+                                    Mulai Cari Talenta
+                                    <ArrowRightIcon className="ml-2 h-4 w-4" />
+                                </Link>
                             </Button>
-                            <Button size="lg" variant="outline" className="border-white text-white hover:bg-blue-800">
-                                Jelajahi Lowongan
-                                <ArrowRightIcon className="ml-2 h-4 w-4" />
+                            <Button size="lg" variant="outline" className="border-white text-white hover:bg-blue-800" asChild>
+                                <Link href={route('listings.index')}>
+                                    Jelajahi Lowongan
+                                    <ArrowRightIcon className="ml-2 h-4 w-4" />
+                                </Link>
                             </Button>
                         </div>
                     </div>
