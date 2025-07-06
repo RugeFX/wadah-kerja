@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
         $routeName = match ($role) {
             RolesEnum::BUSINESS => 'business.dashboard',
             RolesEnum::WORKER => 'worker.dashboard',
-            RolesEnum::ADMIN => 'admin.dashboard',
+            RolesEnum::ADMIN => 'filament.admin.pages.dashboard',
         };
 
         return redirect()->intended(route($routeName, absolute: false));

@@ -13,22 +13,22 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $password = Hash::make('zacky123');
+        $password = Hash::make('password123');
 
         User::factory()->create([
-            'name' => 'Ahmad Zacky',
-            'email' => 'zacky@rugefx.com',
+            'name' => 'Admin',
+            'email' => 'admin@rugefx.com',
             'password' => $password,
         ])->assignRole(\App\Enums\RolesEnum::ADMIN);
 
         User::factory()->create([
-            'name' => 'Ahmad Zacky',
+            'name' => 'Worker',
             'email' => 'worker@rugefx.com',
             'password' => $password,
         ])->assignRole(\App\Enums\RolesEnum::WORKER);
 
         User::factory()->create([
-            'name' => 'Ahmad Zacky',
+            'name' => 'Business',
             'email' => 'business@rugefx.com',
             'password' => $password,
         ])->assignRole(\App\Enums\RolesEnum::BUSINESS);

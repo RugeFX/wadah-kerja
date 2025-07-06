@@ -1,5 +1,5 @@
 import { Link, router } from '@inertiajs/react';
-import { LayoutDashboardIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
+import { LayoutDashboardIcon, LogOutIcon, SettingsIcon, ShieldIcon } from 'lucide-react';
 
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { cn, getInitials } from '@/lib/utils';
@@ -51,6 +51,23 @@ export function UserMenuContent({ user, role }: UserMenuContentProps) {
                         <span>Dashboard</span>
                     </Link>
                 </DropdownMenuItem>
+
+                {/* Admin Panel Link - Only show for admin users */}
+                {role.name === 'admin' && (
+                    <DropdownMenuItem
+                        asChild
+                        className={cn(
+                            buttonVariants({ variant: 'ghost' }),
+                            'w-full justify-start gap-3 bg-transparent text-purple-600 ring-purple-600/20! hover:bg-purple-50! hover:text-purple-700!',
+                        )}
+                    >
+                        <Link href={route('filament.admin.pages.dashboard')} as="button" onClick={cleanup}>
+                            <ShieldIcon className="size-5 text-purple-600" />
+                            <span>Admin Panel</span>
+                        </Link>
+                    </DropdownMenuItem>
+                )}
+
                 <DropdownMenuItem
                     asChild
                     className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start gap-3 bg-transparent hover:bg-accent')}

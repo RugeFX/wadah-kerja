@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'home')->name("home");
 
+Route::middleware('auth')->get("me", fn() => Response::json(auth()->user()));
+
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('admin-dashboard', AdminDashboardController::class)->name('admin.dashboard');
 });
