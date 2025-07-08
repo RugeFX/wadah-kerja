@@ -37,9 +37,7 @@ class BusinessProfileController extends Controller
         $user = $request->user();
         $businessProfile = $user->businessProfile;
 
-        // Handle profile picture upload
         if ($request->hasFile('profile_picture')) {
-            // Delete old profile picture if it exists
             if ($businessProfile->profile_picture_url && !str_contains($businessProfile->profile_picture_url, 'ui-avatars.com')) {
                 $oldPath = str_replace('/storage/', '', $businessProfile->profile_picture_url);
                 if (Storage::disk('public')->exists($oldPath)) {
@@ -47,12 +45,10 @@ class BusinessProfileController extends Controller
                 }
             }
 
-            // Store new profile picture
             $path = $request->file('profile_picture')->store('profile-pictures', 'public');
-            $validated['profile_picture_url'] = '/storage/' . $path;
+            $validated['profile_picture_url'] = "/storage/$path";
         }
 
-        // Remove the profile_picture key as it's not in the database
         if (isset($validated['profile_picture'])) {
             unset($validated['profile_picture']);
         }
