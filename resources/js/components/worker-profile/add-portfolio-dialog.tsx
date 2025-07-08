@@ -60,39 +60,39 @@ export default function AddPortfolioDialog({ isOpen, onClose }: AddPortfolioDial
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
             <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
-                    <DialogTitle>Add Portfolio Item</DialogTitle>
-                    <DialogDescription>Add a new project to your portfolio to showcase your skills.</DialogDescription>
+                    <DialogTitle>Tambah Item Portofolio</DialogTitle>
+                    <DialogDescription>Tambahkan proyek baru ke portofolio Anda untuk menampilkan keterampilan Anda.</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={submitPortfolioItem} className="space-y-4">
                     <div className="grid gap-2">
-                        <Label htmlFor="title">Title</Label>
+                        <Label htmlFor="title">Judul</Label>
                         <Input id="title" value={data.title} onChange={(e) => setData('title', e.target.value)} required />
                         <InputError message={errors.title} />
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="description">Description</Label>
+                        <Label htmlFor="description">Deskripsi</Label>
                         <Textarea id="description" value={data.description} onChange={(e) => setData('description', e.target.value)} rows={3} />
                         <InputError message={errors.description} />
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="project_link">Project Link (optional)</Label>
+                        <Label htmlFor="project_link">Tautan Proyek (opsional)</Label>
                         <Input
                             id="project_link"
                             type="url"
                             value={data.project_link}
                             onChange={(e) => setData('project_link', e.target.value)}
-                            placeholder="https://example.com"
+                            placeholder="https://contoh.com"
                         />
                         <InputError message={errors.project_link} />
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="image">Image</Label>
+                        <Label htmlFor="image">Gambar</Label>
                         {previewImage && (
                             <div className="mb-2 aspect-video w-full overflow-hidden rounded-md border bg-muted">
-                                <img src={previewImage} alt="Preview" className="h-full w-full object-cover" />
+                                <img src={previewImage} alt="Pratinjau" className="h-full w-full object-cover" />
                             </div>
                         )}
                         <Input id="image" type="file" accept="image/*" onChange={handleImageChange} required />
@@ -101,11 +101,11 @@ export default function AddPortfolioDialog({ isOpen, onClose }: AddPortfolioDial
 
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={onClose}>
-                            Cancel
+                            Batal
                         </Button>
                         <Button type="submit" disabled={processing}>
                             {processing && <span className="mr-2 inline-block animate-spin">⟳</span>}
-                            Add Item
+                            Tambah Item
                         </Button>
                     </DialogFooter>
                 </form>

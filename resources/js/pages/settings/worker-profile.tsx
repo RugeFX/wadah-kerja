@@ -1,4 +1,5 @@
 import { Head, usePage } from '@inertiajs/react';
+import { FolderIcon, UserIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -20,14 +21,26 @@ export default function WorkerProfile({ workerProfile, skills }: WorkerProfilePr
 
     return (
         <AppLayout>
-            <Head title="Worker Profile Settings" />
+            <Head title="Pengaturan Profil Pekerja" />
 
             <SettingsLayout>
                 <div className="flex h-full flex-1 flex-col gap-6">
                     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                        <TabsList className="grid w-full grid-cols-2">
-                            <TabsTrigger value="general">General Information</TabsTrigger>
-                            <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
+                        <TabsList className="grid w-full grid-cols-2 rounded-lg bg-primary/5 p-1">
+                            <TabsTrigger
+                                value="general"
+                                className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary dark:data-[state=active]:bg-primary/20"
+                            >
+                                <UserIcon className="h-4 w-4" />
+                                <span>Informasi Umum</span>
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="portfolio"
+                                className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:text-primary dark:data-[state=active]:bg-primary/20"
+                            >
+                                <FolderIcon className="h-4 w-4" />
+                                <span>Portofolio</span>
+                            </TabsTrigger>
                         </TabsList>
 
                         <TabsContent value="general" className="mt-6">

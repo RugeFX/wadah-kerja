@@ -1,15 +1,15 @@
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
+import { BriefcaseIcon, MapPinIcon, SaveIcon, UserIcon } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 import type { MultiValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
 import { cn } from '@/lib/utils';
 
-import HeadingSmall from '@/components/heading-small';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
@@ -59,8 +59,6 @@ export default function GeneralInformationTab({ workerProfile, skills, userName 
     const submitProfile: FormEventHandler = (e) => {
         e.preventDefault();
 
-        console.log({ data });
-
         post(route('worker-profile.update'), {
             preserveScroll: true,
         });
@@ -90,44 +88,47 @@ export default function GeneralInformationTab({ workerProfile, skills, userName 
     };
 
     return (
-        <Card className="bg-background shadow-lg shadow-blue-900/5">
-            <CardHeader>
-                <CardTitle>
-                    <HeadingSmall title="Worker Profile" description="Update your professional information visible to potential clients" />
-                </CardTitle>
-            </CardHeader>
-            <CardContent>
-                <form onSubmit={submitProfile} className="space-y-6">
-                    <div className="flex flex-col gap-6 md:flex-row">
+        <Card className="overflow-visible border-none bg-background shadow-none">
+            <CardContent className="p-0">
+                <form onSubmit={submitProfile} className="space-y-8">
+                    <div className="flex flex-col gap-8 md:flex-row">
                         <div className="flex-1 space-y-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="headline">Professional Headline</Label>
+                                <Label htmlFor="headline" className="flex items-center gap-2 text-sm font-medium">
+                                    <BriefcaseIcon className="h-4 w-4 text-muted-foreground" />
+                                    <span>Judul Profesional</span>
+                                </Label>
                                 <Input
                                     id="headline"
                                     className="mt-1 block w-full"
                                     value={data.headline}
                                     onChange={(e) => setData('headline', e.target.value)}
                                     required
-                                    placeholder="e.g. Senior Web Developer"
+                                    placeholder="mis. Pengembang Web Senior"
                                 />
                                 <InputError className="mt-2" message={errors.headline} />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="location">Location</Label>
+                                <Label htmlFor="location" className="flex items-center gap-2 text-sm font-medium">
+                                    <MapPinIcon className="h-4 w-4 text-muted-foreground" />
+                                    <span>Lokasi</span>
+                                </Label>
                                 <Input
                                     id="location"
                                     className="mt-1 block w-full"
                                     value={data.location}
                                     onChange={(e) => setData('location', e.target.value)}
                                     required
-                                    placeholder="e.g. Jakarta, Indonesia"
+                                    placeholder="mis. Jakarta, Indonesia"
                                 />
                                 <InputError className="mt-2" message={errors.location} />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="bio">Bio</Label>
+                                <Label htmlFor="bio" className="text-sm font-medium">
+                                    Bio
+                                </Label>
                                 <Textarea
                                     id="bio"
                                     className="mt-1 block w-full"
@@ -135,17 +136,17 @@ export default function GeneralInformationTab({ workerProfile, skills, userName 
                                     onChange={(e) => setData('bio', e.target.value)}
                                     required
                                     rows={5}
-                                    placeholder="Tell clients about your professional background, experience, and skills"
+                                    placeholder="Ceritakan kepada klien tentang latar belakang profesional, pengalaman, dan keterampilan Anda"
                                 />
                                 <InputError className="mt-2" message={errors.bio} />
                             </div>
                         </div>
 
                         <div className="w-full md:w-1/3">
-                            <div className="grid gap-2">
-                                <Label>Profile Picture</Label>
+                            <div className="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+                                <h3 className="mb-4 text-lg font-medium">Foto Profil</h3>
                                 <div className="flex flex-col items-center gap-4">
-                                    <div className="relative h-40 w-40 overflow-hidden rounded-full border">
+                                    <div className="relative h-40 w-40 overflow-hidden rounded-full border-4 border-primary/10">
                                         <img
                                             src={previewImage || workerProfile.profile_picture_url || ''}
                                             alt={userName}
@@ -159,6 +160,9 @@ export default function GeneralInformationTab({ workerProfile, skills, userName 
                                         onChange={handleProfilePictureChange}
                                         className="w-full"
                                     />
+                                    <p className="text-xs text-muted-foreground">
+                                        Unggah foto profil profesional. Gambar persegi bekerja paling baik.
+                                    </p>
                                 </div>
                                 <InputError className="mt-2" message={errors.profile_picture} />
                             </div>
@@ -168,8 +172,11 @@ export default function GeneralInformationTab({ workerProfile, skills, userName 
                     <Separator />
 
                     <div className="grid gap-4">
-                        <Label>Skills</Label>
-                        <p className="text-sm text-muted-foreground">Select skills from the list or type to add new custom skills</p>
+                        <Label className="flex items-center gap-2 text-sm font-medium">
+                            <UserIcon className="h-4 w-4 text-muted-foreground" />
+                            <span>Keterampilan</span>
+                        </Label>
+                        <p className="text-sm text-muted-foreground">Pilih keterampilan dari daftar atau ketik untuk menambahkan keterampilan baru</p>
 
                         <CreatableSelect
                             unstyled
@@ -177,9 +184,9 @@ export default function GeneralInformationTab({ workerProfile, skills, userName 
                             value={selectedOptions}
                             options={skillOptions}
                             onChange={handleSkillChange}
-                            placeholder="Select or type skills"
-                            noOptionsMessage={() => 'Type to add a new skill'}
-                            formatCreateLabel={(inputValue: string) => `Add "${inputValue}"`}
+                            placeholder="Pilih atau ketik keterampilan"
+                            noOptionsMessage={() => 'Ketik untuk menambahkan keterampilan baru'}
+                            formatCreateLabel={(inputValue: string) => `Tambahkan "${inputValue}"`}
                             classNames={{
                                 control: (state) =>
                                     cn(
@@ -208,9 +215,9 @@ export default function GeneralInformationTab({ workerProfile, skills, userName 
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <Button disabled={processing}>
-                            {processing && <span className="mr-2 inline-block animate-spin">⟳</span>}
-                            Save Changes
+                        <Button disabled={processing} className="flex items-center gap-2">
+                            {processing ? <span className="mr-2 inline-block animate-spin">⟳</span> : <SaveIcon className="h-4 w-4" />}
+                            Simpan Perubahan
                         </Button>
 
                         <Transition
@@ -220,7 +227,7 @@ export default function GeneralInformationTab({ workerProfile, skills, userName 
                             leave="transition ease-in-out"
                             leaveTo="opacity-0"
                         >
-                            <p className="text-sm text-green-600">Saved successfully</p>
+                            <p className="text-sm text-green-600">Berhasil disimpan</p>
                         </Transition>
                     </div>
                 </form>

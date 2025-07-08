@@ -43,7 +43,7 @@ export default function Password() {
 
     return (
         <AppLayout>
-            <Head title="Password settings" />
+            <Head title="Pengaturan Kata Sandi" />
 
             <SettingsLayout>
                 <div className="flex h-full flex-1 flex-col gap-6">
@@ -51,15 +51,15 @@ export default function Password() {
                         <CardHeader>
                             <CardTitle>
                                 <HeadingSmall
-                                    title="Update password"
-                                    description="Ensure your account is using a long, random password to stay secure"
+                                    title="Perbarui Kata Sandi"
+                                    description="Pastikan akun Anda menggunakan kata sandi yang panjang dan acak untuk tetap aman"
                                 />
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <form onSubmit={updatePassword} className="space-y-6">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="current_password">Current password</Label>
+                                    <Label htmlFor="current_password">Kata Sandi Saat Ini</Label>
                                     <Input
                                         id="current_password"
                                         ref={currentPasswordInput}
@@ -68,13 +68,13 @@ export default function Password() {
                                         type="password"
                                         className="mt-1 block w-full"
                                         autoComplete="current-password"
-                                        placeholder="Current password"
+                                        placeholder="Kata sandi saat ini"
                                     />
                                     <InputError message={errors.current_password} />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="password">New password</Label>
+                                    <Label htmlFor="password">Kata Sandi Baru</Label>
                                     <Input
                                         id="password"
                                         ref={passwordInput}
@@ -83,13 +83,13 @@ export default function Password() {
                                         type="password"
                                         className="mt-1 block w-full"
                                         autoComplete="new-password"
-                                        placeholder="New password"
+                                        placeholder="Kata sandi baru"
                                     />
                                     <InputError message={errors.password} />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="password_confirmation">Confirm password</Label>
+                                    <Label htmlFor="password_confirmation">Konfirmasi Kata Sandi</Label>
                                     <Input
                                         id="password_confirmation"
                                         value={data.password_confirmation}
@@ -97,13 +97,13 @@ export default function Password() {
                                         type="password"
                                         className="mt-1 block w-full"
                                         autoComplete="new-password"
-                                        placeholder="Confirm password"
+                                        placeholder="Konfirmasi kata sandi"
                                     />
                                     <InputError message={errors.password_confirmation} />
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    <Button disabled={processing}>Save changes</Button>
+                                    <Button disabled={processing}>Simpan Perubahan</Button>
 
                                     <Transition
                                         show={recentlySuccessful}
@@ -112,7 +112,7 @@ export default function Password() {
                                         leave="transition ease-in-out"
                                         leaveTo="opacity-0"
                                     >
-                                        <p className="text-sm text-muted-foreground">Saved successfully</p>
+                                        <p className="text-sm text-muted-foreground">Berhasil disimpan</p>
                                     </Transition>
                                 </div>
                             </form>
