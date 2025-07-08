@@ -10,6 +10,7 @@ import { type PropsWithChildren } from 'react';
 export default function SettingsLayout({ children }: PropsWithChildren) {
     const { auth } = usePage<SharedData<true>>().props;
     const isWorker = auth.role?.name === 'worker';
+    const isBusiness = auth.role?.name === 'business';
 
     // When server-side rendering, we only render the layout on the client...
     if (typeof window === 'undefined') {
@@ -24,21 +25,29 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
             href: '/settings/profile',
             icon: null,
         },
+        ...(isWorker
+            ? [
+                  {
+                      title: 'Worker Profile',
+                      href: '/settings/worker-profile',
+                      icon: null,
+                  },
+              ]
+            : isBusiness
+              ? [
+                    {
+                        title: 'Business Profile',
+                        href: '/settings/business-profile',
+                        icon: null,
+                    },
+                ]
+              : []),
         {
             title: 'Password',
             href: '/settings/password',
             icon: null,
         },
     ];
-
-    // Add worker profile settings option for workers
-    if (isWorker) {
-        sidebarNavItems.push({
-            title: 'Worker Profile',
-            href: '/settings/worker-profile',
-            icon: null,
-        });
-    }
 
     return (
         <div className="relative w-full">

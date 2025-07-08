@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Settings\BusinessProfileController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\WorkerProfileController;
@@ -24,5 +25,11 @@ Route::middleware('auth')->group(function () {
         Route::post('settings/worker-profile/portfolio', [WorkerProfileController::class, 'storePortfolioItem'])->name('worker-profile.portfolio.store');
         Route::patch('settings/worker-profile/portfolio/{portfolioItem}', [WorkerProfileController::class, 'updatePortfolioItem'])->name('worker-profile.portfolio.update');
         Route::delete('settings/worker-profile/portfolio/{portfolioItem}', [WorkerProfileController::class, 'destroyPortfolioItem'])->name('worker-profile.portfolio.destroy');
+    });
+
+    // Business profile settings routes (protected by business role middleware)
+    Route::middleware('role:business')->group(function () {
+        Route::get('settings/business-profile', [BusinessProfileController::class, 'edit'])->name('business-profile.edit');
+        Route::patch('settings/business-profile', [BusinessProfileController::class, 'update'])->name('business-profile.update');
     });
 });

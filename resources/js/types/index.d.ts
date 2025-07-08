@@ -97,6 +97,7 @@ export interface BusinessProfile {
     description: string | null;
     website: string | null;
     location: string | null;
+    profile_picture_url: string | null;
 }
 
 export interface WorkerProfile {
