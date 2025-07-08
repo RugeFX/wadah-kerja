@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:experimental
 
-ARG PHP_VERSION=8.2
+ARG PHP_VERSION=8.3
 ARG NODE_VERSION=18
 FROM ubuntu:22.04 as base
 LABEL fly_launch_runtime="laravel"
@@ -68,13 +68,9 @@ RUN composer install --optimize-autoloader --no-dev \
     if [ -d .fly ]; then cp .fly/entrypoint.sh /entrypoint; chmod +x /entrypoint; fi;
 
 
-
-
 # Multi-stage build: Build static assets
 # This allows us to not include Node within the final container
 FROM node:${NODE_VERSION} as node_modules_go_brrr
-
-RUN mkdir /app
 
 RUN mkdir -p  /app
 WORKDIR /app
