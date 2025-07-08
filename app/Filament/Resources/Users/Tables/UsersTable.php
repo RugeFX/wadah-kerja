@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Enums\RolesEnum;
+use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -17,6 +19,9 @@ class UsersTable
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
+                TextColumn::make('roles')
+                    ->label('Role')
+                    ->formatStateUsing(fn(User $record) => RolesEnum::from($record->roles->first()->name)->label()),
                 TextColumn::make('email')
                     ->searchable(),
                 TextColumn::make('email_verified_at')

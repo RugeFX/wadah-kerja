@@ -334,10 +334,7 @@ export default function Register({ skills }: RegisterProps) {
         const selectedOptions = [...skillOptions.filter((option) => data.skill_ids.includes(option.value)), ...customOptions];
 
         const handleChange = (newValue: MultiValue<{ value: string | number; label: string; __isNew__?: boolean }>) => {
-            console.log(newValue);
-
             const existingSkills = newValue.filter((v) => !v.__isNew__).map((v) => v.value as number);
-
             const customSkills = newValue.filter((v) => v.__isNew__).map((v) => v.label as string);
 
             setData({

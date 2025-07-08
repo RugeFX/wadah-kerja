@@ -102,7 +102,9 @@ export interface BusinessProfile {
 export interface WorkerProfile {
     id: number;
     user_id: number;
+    headline: string;
     bio: string | null;
+    profile_picture_url: string | null;
     location: string | null;
     average_rating: number;
     completed_projects_count: number;
@@ -113,6 +115,7 @@ interface PortfolioItem {
     title: string;
     description: string;
     image_url?: string;
+    project_link?: string;
 }
 
 export interface WorkerProfileWithRelations extends WorkerProfile {

@@ -8,6 +8,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -67,6 +68,16 @@ class AdminPanelProvider extends PanelProvider
                 'Master Data',
                 'Profiles',
                 'Jobs',
+            ])
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Home')
+                    ->url(fn() => route('home'))
+                    ->icon('lucide-home'),
+                MenuItem::make()
+                    ->label('Profil')
+                    ->url(fn() => route('profile.edit'))
+                    ->icon('lucide-user')
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')

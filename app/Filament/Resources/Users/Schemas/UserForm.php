@@ -26,18 +26,6 @@ class UserForm
                 TextInput::make('password')
                     ->password()
                     ->required(),
-                Fieldset::make('Business Profile')
-                    ->relationship('businessProfile')
-                    ->visible(fn(Get $get) => $get('role') == 3)
-                    ->schema([
-                        TextInput::make('company_name')
-                            ->required(),
-                        TextInput::make('location')
-                            ->required(),
-                        Textarea::make('description')
-                            ->columnSpanFull(),
-                        TextInput::make('profile_picture_url'),
-                    ]),
             ]);
     }
 }

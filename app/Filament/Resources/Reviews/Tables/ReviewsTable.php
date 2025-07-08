@@ -18,11 +18,11 @@ class ReviewsTable
                 TextColumn::make('listing_id')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('reviewer_id')
-                    ->numeric()
+                TextColumn::make('listing.title')
                     ->sortable(),
-                TextColumn::make('reviewee_id')
-                    ->numeric()
+                TextColumn::make('reviewer.name')
+                    ->sortable(),
+                TextColumn::make('reviewee.name')
                     ->sortable(),
                 TextColumn::make('rating')
                     ->numeric()

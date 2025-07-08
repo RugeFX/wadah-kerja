@@ -1,5 +1,5 @@
 import { Head, router, usePage } from '@inertiajs/react';
-import { BriefcaseIcon, InboxIcon, StarIcon, TrendingUpIcon } from 'lucide-react';
+import { BriefcaseIcon, InboxIcon, StarIcon, TrendingUpIcon, UserIcon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -27,13 +27,22 @@ export default function WorkerDashboard({ stats, recommendedListings }: WorkerDa
             {/* Worker Overview - Full Bleed */}
             <div className="relative w-full bg-gradient-to-b from-blue-900 to-blue-700 pt-24 shadow-xl shadow-blue-900/10">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#ffffff20_100%)] dark:bg-[linear-gradient(to_right,transparent_0%,#ffffff10_100%)]" />
-                <div className="container mx-auto px-6 py-8">
+                <div className="relative container mx-auto px-6 py-8">
                     {/* User Greeting */}
-                    <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-white">
-                            Selamat {getCurrentTimeOfDay()}, {auth.user.name.split(' ')[0]} 👋
-                        </h1>
-                        <p className="mt-2 text-blue-100">Selamat datang kembali di dasbor Anda. Berikut ringkasan aktivitas Anda hari ini.</p>
+                    <div className="mb-8 flex items-center justify-between">
+                        <div>
+                            <h1 className="text-3xl font-bold text-white">
+                                Selamat {getCurrentTimeOfDay()}, {auth.user.name.split(' ')[0]} 👋
+                            </h1>
+                            <p className="mt-2 text-blue-100">Selamat datang kembali di dasbor Anda. Berikut ringkasan aktivitas Anda hari ini.</p>
+                        </div>
+                        <Button
+                            variant="outline"
+                            className="bg-white/10 text-white hover:bg-white/20"
+                            onClick={() => router.visit(route('worker-profile.edit'))}
+                        >
+                            <UserIcon className="mr-2 h-4 w-4" /> Edit Profile
+                        </Button>
                     </div>
 
                     {/* Quick Stats */}
