@@ -10,6 +10,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Pagination } from '@/components/ui/pagination';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import type { Listing, PaginationData, Skill } from '@/types';
@@ -338,20 +339,8 @@ export default function ListingsPage({ listings, skills, filters }: ListingsPage
 
                 {/* Pagination */}
                 {listings.last_page > 1 && (
-                    <div className="mt-12 flex items-center justify-center gap-2">
-                        {listings.links.map((link, i) => (
-                            <Button
-                                key={i}
-                                variant={link.active ? 'default' : 'outline'}
-                                size={link.label.length > 1 ? 'default' : 'icon'}
-                                disabled={!link.url}
-                                onClick={() => router.get(link.url ?? '', {}, { preserveScroll: true })}
-                                dangerouslySetInnerHTML={{ __html: link.label }}
-                                className={cn({
-                                    'bg-blue-600 hover:bg-blue-700': link.active,
-                                })}
-                            />
-                        ))}
+                    <div className="mt-12 flex items-center justify-center">
+                        <Pagination currentPage={listings.current_page} lastPage={listings.last_page} links={listings.links} />
                     </div>
                 )}
             </div>

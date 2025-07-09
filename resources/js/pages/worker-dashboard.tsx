@@ -45,43 +45,25 @@ export default function WorkerDashboard({ stats, recommendedListings }: WorkerDa
                             <UserIcon className="mr-2 h-4 w-4" /> Edit Profile
                         </Button>
                     </div>
-
-                    {/* Quick Stats */}
-                    <div className="flex items-center gap-2 text-lg font-semibold text-white">
-                        <TrendingUpIcon className="h-5 w-5" />
-                        <h2>Ringkasan Aktivitas</h2>
-                    </div>
-                    <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                        <div className="rounded-xl bg-white/10 p-4 backdrop-blur">
-                            <h3 className="text-sm text-blue-100">Total Lamaran</h3>
-                            <div className="mt-2 text-2xl font-bold text-white">{stats.totalApplications}</div>
-                        </div>
-                        <div className="rounded-xl bg-white/10 p-4 backdrop-blur">
-                            <h3 className="text-sm text-blue-100">Proyek Aktif</h3>
-                            <div className="mt-2 text-2xl font-bold text-white">{stats.activeJobs}</div>
-                        </div>
-                        <div className="rounded-xl bg-white/10 p-4 backdrop-blur">
-                            <h3 className="text-sm text-blue-100">Pesan Baru</h3>
-                            <div className="mt-2 text-2xl font-bold text-white">{stats.unreadMessages}</div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
             <div className="container mx-auto flex h-full flex-1 flex-col gap-6 px-6 py-8">
                 {/* Detailed Stats Cards */}
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    <Card className="relative overflow-hidden bg-white/50 shadow-lg shadow-blue-900/5 backdrop-blur-sm dark:bg-neutral-900/50">
-                        <div className="absolute top-0 right-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-blue-500/10" />
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">Lamaran Terkirim</CardTitle>
-                            <BriefcaseIcon className="h-4 w-4 text-blue-500" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold text-blue-900 dark:text-blue-100">{stats.totalApplications}</div>
-                            <p className="text-xs text-muted-foreground">Total lamaran yang telah Anda kirim</p>
-                        </CardContent>
-                    </Card>
+                    <Link href={route('worker.proposals')} className="block">
+                        <Card className="relative overflow-hidden bg-white/50 shadow-lg shadow-blue-900/5 backdrop-blur-sm transition-all hover:shadow-md dark:bg-neutral-900/50">
+                            <div className="absolute top-0 right-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-blue-500/10" />
+                            <CardHeader className="flex flex-row items-center justify-between pb-2">
+                                <CardTitle className="text-sm font-medium">Lamaran Terkirim</CardTitle>
+                                <BriefcaseIcon className="h-4 w-4 text-blue-500" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold text-blue-900 dark:text-blue-100">{stats.totalApplications}</div>
+                                <p className="text-xs text-muted-foreground">Total lamaran yang telah Anda kirim</p>
+                            </CardContent>
+                        </Card>
+                    </Link>
 
                     <Card className="relative overflow-hidden bg-white/50 shadow-lg shadow-green-900/5 backdrop-blur-sm dark:bg-neutral-900/50">
                         <div className="absolute top-0 right-0 h-24 w-24 translate-x-8 -translate-y-8 rounded-full bg-green-500/10" />
@@ -116,9 +98,14 @@ export default function WorkerDashboard({ stats, recommendedListings }: WorkerDa
                                 <StarIcon className="h-5 w-5 text-yellow-500" />
                                 Rekomendasi Pekerjaan Terbaru
                             </CardTitle>
-                            <Button variant="default" size="lg" onClick={() => router.get(route('listings.index'))}>
-                                Cari Pekerjaan Lain
-                            </Button>
+                            <div className="flex gap-2">
+                                <Button variant="outline" onClick={() => router.visit(route('worker.proposals'))}>
+                                    Lihat Proposal Saya
+                                </Button>
+                                <Button variant="default" onClick={() => router.visit(route('listings.index'))}>
+                                    Cari Pekerjaan
+                                </Button>
+                            </div>
                         </div>
                     </CardHeader>
                     <CardContent>

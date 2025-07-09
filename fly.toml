@@ -17,6 +17,7 @@ source = "storage_vol"
 destination = "/var/www/html/storage"
 
 [env]
+APP_NAME = 'Wadah Kerja'
 APP_ENV = 'development'
 APP_DEBUG = true
 APP_URL = 'https://wadah-kerja.fly.dev'

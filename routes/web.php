@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BusinessDashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ListingController;
+use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\TalentController;
 use App\Http\Controllers\WorkerDashboardController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,10 @@ Route::middleware(['auth', 'role:business'])->group(function () {
 
 Route::middleware(['auth', 'role:worker'])->group(function () {
     Route::get('worker-dashboard', WorkerDashboardController::class)->name('worker.dashboard');
+
+    Route::get('proposals', [ProposalController::class, 'index'])->name('worker.proposals');
+    Route::get('listings/{listing}/propose', [ProposalController::class, 'create'])->name('proposals.create');
+    Route::post('listings/{listing}/propose', [ProposalController::class, 'store'])->name('proposals.store');
 });
 
 // Job Listings

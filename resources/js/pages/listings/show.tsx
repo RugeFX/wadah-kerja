@@ -1,4 +1,4 @@
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { format } from 'date-fns';
 import { ArrowLeftIcon, BriefcaseIcon, BuildingIcon, CalendarIcon, ClockIcon, MapPinIcon, SendIcon, StarIcon } from 'lucide-react';
 
@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
-import type { Listing } from '@/types';
+import type { Listing, SharedData } from '@/types';
 
 interface ListingDetailProps {
     listing: Listing;
@@ -17,6 +17,9 @@ interface ListingDetailProps {
 }
 
 export default function ListingDetail({ listing, similarListings }: ListingDetailProps) {
+    const { auth } = usePage<SharedData<true>>().props;
+    const isWorker = auth.role?.name === 'worker';
+
     return (
         <AppLayout>
             <Head title={listing.title} />
@@ -137,11 +140,22 @@ export default function ListingDetail({ listing, similarListings }: ListingDetai
                     <div className="space-y-6">
                         {/* Apply Button */}
                         <Card className="bg-white/50 shadow-lg shadow-blue-900/5 backdrop-blur-sm dark:bg-neutral-900/50">
-                            <CardContent>
-                                <Button className="w-full gap-2 bg-blue-600 hover:bg-blue-700" size="lg">
-                                    <SendIcon className="h-4 w-4" />
-                                    Kirim Lamaran
-                                </Button>
+                            <CardContent className="py-4">
+                                {isWorker ? (
+                                    <Button
+                                        className="w-full gap-2 bg-blue-600 hover:bg-blue-700"
+                                        size="lg"
+                                        onClick={() => router.visit(route('proposals.create', { listing: listing.id }))}
+                                    >
+                                        <SendIcon className="h-4 w-4" />
+                                        Kirim Lamaran
+                                    </Button>
+                                ) : (
+                                    <Button className="w-full gap-2" size="lg" variant="outline" onClick={() => router.visit(route('login'))}>
+                                        <SendIcon className="h-4 w-4" />
+                                        Login sebagai Pekerja untuk Melamar
+                                    </Button>
+                                )}
                             </CardContent>
                         </Card>
 

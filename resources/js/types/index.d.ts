@@ -125,6 +125,18 @@ export interface WorkerProfileWithRelations extends WorkerProfile {
     portfolio_items: PortfolioItem[];
 }
 
+export interface Proposal {
+    id: number;
+    listing_id: number;
+    worker_profile_id: number;
+    cover_letter: string | null;
+    status: 'SENT' | 'VIEWED' | 'ACCEPTED' | 'REJECTED';
+    created_at: string;
+    updated_at: string;
+    listing?: Listing;
+    worker_profile?: WorkerProfile;
+}
+
 export interface BaseListing {
     id: number;
     business_profile_id: number;
