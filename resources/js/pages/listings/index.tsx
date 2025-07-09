@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import type { Listing, PaginationData, Skill } from '@/types';
@@ -235,7 +236,7 @@ export default function ListingsPage({ listings, skills, filters }: ListingsPage
                                 <h4 className="font-medium">Keahlian</h4>
                                 <div className="max-h-[200px] space-y-2 overflow-y-auto rounded-md border bg-background p-2">
                                     {skills.map((skill) => (
-                                        <div
+                                        <Label
                                             key={skill.id}
                                             className={cn(
                                                 'flex shrink-0 cursor-pointer items-center gap-2 rounded-full border px-4 py-2 transition-colors',
@@ -243,17 +244,17 @@ export default function ListingsPage({ listings, skills, filters }: ListingsPage
                                                     ? 'border-blue-600 bg-blue-50 text-blue-600'
                                                     : 'border-transparent bg-muted/50 hover:bg-muted',
                                             )}
-                                            onClick={() => {
-                                                if (selectedSkills.includes(skill.id)) {
-                                                    setSelectedSkills(selectedSkills.filter((id) => id !== skill.id));
-                                                } else {
-                                                    setSelectedSkills([...selectedSkills, skill.id]);
-                                                }
-                                            }}
                                         >
                                             <Checkbox
                                                 id={`skill-${skill.id}`}
                                                 checked={selectedSkills.includes(skill.id)}
+                                                onCheckedChange={() => {
+                                                    if (selectedSkills.includes(skill.id)) {
+                                                        setSelectedSkills(selectedSkills.filter((id) => id !== skill.id));
+                                                    } else {
+                                                        setSelectedSkills([...selectedSkills, skill.id]);
+                                                    }
+                                                }}
                                                 className={cn(
                                                     'size-4 rounded-full border-none transition-colors',
                                                     selectedSkills.includes(skill.id)
@@ -261,13 +262,10 @@ export default function ListingsPage({ listings, skills, filters }: ListingsPage
                                                         : 'bg-background data-[state=checked]:bg-blue-600 data-[state=checked]:text-white',
                                                 )}
                                             />
-                                            <label
-                                                htmlFor={`skill-${skill.id}`}
-                                                className="text-sm leading-none font-medium select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                            >
+                                            <span className="text-sm leading-none font-medium select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                                                 {skill.name}
-                                            </label>
-                                        </div>
+                                            </span>
+                                        </Label>
                                     ))}
                                 </div>
                             </div>
@@ -280,7 +278,7 @@ export default function ListingsPage({ listings, skills, filters }: ListingsPage
                     {listings.data.map((listing) => (
                         <Card
                             key={listing.id}
-                            className="group relative overflow-hidden transition-all hover:shadow-lg hover:ring-1 hover:ring-blue-600 dark:hover:ring-blue-900"
+                            className="group relative overflow-hidden transition-all hover:cursor-pointer hover:shadow-lg hover:ring-1 hover:ring-blue-600 dark:hover:ring-blue-900"
                             onClick={() => router.get(route('listings.show', { listing: listing.id }))}
                         >
                             <CardHeader className="space-y-2">

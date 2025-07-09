@@ -64,7 +64,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                 <div className="container mx-auto px-6 py-8">
                     <div className="flex flex-col space-y-8 lg:flex-row lg:space-y-0 lg:space-x-12">
                         <aside className="w-full lg:w-72">
-                            <Card className="overflow-hidden bg-background pt-0 shadow-lg shadow-blue-900/5">
+                            <Card className="gap-0 overflow-hidden bg-background py-0 shadow-lg shadow-blue-900/5">
                                 <div className="bg-primary/5 p-4">
                                     <h2 className="text-lg font-semibold text-primary">Pengaturan</h2>
                                     <p className="text-sm text-muted-foreground">Kelola preferensi akun Anda</p>

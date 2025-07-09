@@ -34,10 +34,10 @@ class SkillSeeder extends Seeder
         ];
 
         foreach ($predefinedSkills as $skill) {
-            Skill::factory()->create(['name' => $skill]);
+            Skill::create(['name' => $skill]);
         }
 
         // Create some random skills
         Skill::factory()->count(10)->create();
     }
-} 
+}

@@ -74,14 +74,16 @@ const howItWorksSteps = [
     },
 ];
 
-const jobCategories = [
-    { Icon: PaletteIcon, name: 'Desain Grafis', count: 142 },
-    { Icon: CodeIcon, name: 'Web Development', count: 89 },
-    { Icon: MegaphoneIcon, name: 'Digital Marketing', count: 156 },
-    { Icon: CalculatorIcon, name: 'Akuntansi', count: 73 },
-    { Icon: CameraIcon, name: 'Fotografi', count: 95 },
-    { Icon: PenToolIcon, name: 'Content Writing', count: 108 },
-];
+const skillIconMap = {
+    'Desain Grafis': PaletteIcon,
+    'Web Development': CodeIcon,
+    'Digital Marketing': MegaphoneIcon,
+    Akuntansi: CalculatorIcon,
+    Fotografi: CameraIcon,
+    'Content Writing': PenToolIcon,
+    // Default icon for other skills
+    default: BriefcaseIcon,
+};
 
 const statistics = [
     { number: '2,500+', label: 'Proyek Selesai' },
@@ -114,7 +116,15 @@ const testimonials = [
     },
 ];
 
-export default function Home() {
+interface HomeProps {
+    popularSkills: {
+        id: number;
+        name: string;
+        count: number;
+    }[];
+}
+
+export default function Home({ popularSkills }: HomeProps) {
     return (
         <>
             <Head title="Home" />
@@ -406,22 +416,33 @@ export default function Home() {
                         <p className="text-lg text-muted-foreground">Temukan berbagai kategori pekerjaan yang paling dibutuhkan UMKM</p>
                     </div>
                     <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
-                        {jobCategories.map((category, index) => (
-                            <div
-                                key={index}
-                                className="group cursor-pointer rounded-lg border border-border p-6 transition-all hover:border-blue-300 hover:shadow-md"
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 transition-colors group-hover:bg-blue-200">
-                                        <category.Icon className="size-6 text-blue-900" />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold text-foreground">{category.name}</h3>
-                                        <p className="text-sm text-muted-foreground">{category.count} proyek tersedia</p>
-                                    </div>
-                                </div>
+                        {popularSkills.length > 0 ? (
+                            popularSkills.map((skill, index) => {
+                                const Icon = skillIconMap[skill.name as keyof typeof skillIconMap] || skillIconMap.default;
+
+                                return (
+                                    <Link
+                                        key={index}
+                                        href={route('listings.index', { skills: skill.id })}
+                                        className="group cursor-pointer rounded-lg border border-border p-6 transition-all hover:border-blue-300 hover:shadow-md"
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 transition-colors group-hover:bg-blue-200">
+                                                <Icon className="size-6 text-blue-900" />
+                                            </div>
+                                            <div>
+                                                <h3 className="font-semibold text-foreground">{skill.name}</h3>
+                                                <p className="text-sm text-muted-foreground">{skill.count} lowongan tersedia</p>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                );
+                            })
+                        ) : (
+                            <div className="col-span-2 py-8 text-center md:col-span-3">
+                                <p className="text-muted-foreground">Belum ada kategori pekerjaan tersedia.</p>
                             </div>
-                        ))}
+                        )}
                     </div>
                 </section>
 

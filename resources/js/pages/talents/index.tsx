@@ -1,14 +1,16 @@
 import { Head, router } from '@inertiajs/react';
-import { MapPinIcon, SearchIcon, SlidersHorizontalIcon, StarIcon, UserIcon, XIcon } from 'lucide-react';
+import { MapPinIcon, SearchIcon, SlidersHorizontalIcon, StarIcon, XIcon } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import type { PaginationData, Skill, WorkerProfileWithRelations } from '@/types';
@@ -57,20 +59,6 @@ export default function TalentsPage({ talents, skills, filters }: TalentsPagePro
     }, [selectedSkills, filters, updateFilters]);
 
     const hasFilters = useMemo(() => filters.min_rating !== null || selectedSkills.length > 0, [filters, selectedSkills]);
-
-    const renderStars = (rating: number) => {
-        return (
-            <div className="flex items-center">
-                {[...Array(5)].map((_, i) => (
-                    <StarIcon
-                        key={i}
-                        className={cn('h-4 w-4', i < Math.floor(rating) ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200')}
-                    />
-                ))}
-                <span className="ml-2 text-sm font-medium">{rating.toFixed(1)}</span>
-            </div>
-        );
-    };
 
     return (
         <AppLayout>
@@ -219,46 +207,39 @@ export default function TalentsPage({ talents, skills, filters }: TalentsPagePro
                             {/* Skills Filter */}
                             <div className="col-span-full space-y-4">
                                 <h4 className="font-medium">Keahlian</h4>
-                                <div className="relative">
-                                    <div className="absolute top-0 left-0 h-full w-4 bg-gradient-to-r from-card to-transparent" />
-                                    <div className="absolute top-0 right-0 h-full w-4 bg-gradient-to-l from-card to-transparent" />
-                                    <div className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-blue-600/20 hover:scrollbar-thumb-blue-600/40 flex gap-2 overflow-x-auto px-4 pt-1 pb-2">
-                                        {skills.map((skill) => (
-                                            <div
-                                                key={skill.id}
-                                                className={cn(
-                                                    'flex shrink-0 cursor-pointer items-center gap-2 rounded-full border px-4 py-2 transition-colors',
-                                                    selectedSkills.includes(skill.id)
-                                                        ? 'border-blue-600 bg-blue-50 text-blue-600'
-                                                        : 'border-transparent bg-muted/50 hover:bg-muted',
-                                                )}
-                                                onClick={() => {
+                                <div className="max-h-[200px] space-y-2 overflow-y-auto rounded-md border bg-background p-2">
+                                    {skills.map((skill) => (
+                                        <Label
+                                            key={skill.id}
+                                            className={cn(
+                                                'flex shrink-0 cursor-pointer items-center gap-2 rounded-full border px-4 py-2 transition-colors',
+                                                selectedSkills.includes(skill.id)
+                                                    ? 'border-blue-600 bg-blue-50 text-blue-600'
+                                                    : 'border-transparent bg-muted/50 hover:bg-muted',
+                                            )}
+                                        >
+                                            <Checkbox
+                                                id={`skill-${skill.id}`}
+                                                checked={selectedSkills.includes(skill.id)}
+                                                onCheckedChange={() => {
                                                     if (selectedSkills.includes(skill.id)) {
                                                         setSelectedSkills(selectedSkills.filter((id) => id !== skill.id));
                                                     } else {
                                                         setSelectedSkills([...selectedSkills, skill.id]);
                                                     }
                                                 }}
-                                            >
-                                                <Checkbox
-                                                    id={`skill-${skill.id}`}
-                                                    checked={selectedSkills.includes(skill.id)}
-                                                    className={cn(
-                                                        'h-4 w-4 rounded-full border-none transition-colors',
-                                                        selectedSkills.includes(skill.id)
-                                                            ? 'bg-blue-600 text-white'
-                                                            : 'bg-background data-[state=checked]:bg-blue-600 data-[state=checked]:text-white',
-                                                    )}
-                                                />
-                                                <label
-                                                    htmlFor={`skill-${skill.id}`}
-                                                    className="text-sm leading-none font-medium select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                >
-                                                    {skill.name}
-                                                </label>
-                                            </div>
-                                        ))}
-                                    </div>
+                                                className={cn(
+                                                    'size-4 rounded-full border-none transition-colors',
+                                                    selectedSkills.includes(skill.id)
+                                                        ? 'bg-blue-600 text-white'
+                                                        : 'bg-background data-[state=checked]:bg-blue-600 data-[state=checked]:text-white',
+                                                )}
+                                            />
+                                            <span className="text-sm leading-none font-medium select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                                {skill.name}
+                                            </span>
+                                        </Label>
+                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -270,16 +251,15 @@ export default function TalentsPage({ talents, skills, filters }: TalentsPagePro
                     {talents.data.map((talent) => (
                         <Card
                             key={talent.id}
-                            className="group relative overflow-hidden transition-all hover:shadow-lg hover:ring-1 hover:ring-blue-600 dark:hover:ring-blue-900"
+                            className="group relative overflow-hidden transition-all hover:cursor-pointer hover:shadow-lg hover:ring-1 hover:ring-blue-600 dark:hover:ring-blue-900"
                             onClick={() => router.get(route('talents.show', { talent: talent.id }))}
                         >
                             <CardHeader className="space-y-2">
                                 <div className="flex items-center gap-3">
-                                    <div className="flex-shrink-0">
-                                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                                            <UserIcon className="h-6 w-6" />
-                                        </div>
-                                    </div>
+                                    <Avatar className="size-12 shrink-0">
+                                        <AvatarImage src={talent.profile_picture_url ?? undefined} alt={talent.user.name} />
+                                        <AvatarFallback />
+                                    </Avatar>
                                     <div>
                                         <CardTitle className="line-clamp-1 text-lg group-hover:text-blue-600">{talent.user.name}</CardTitle>
                                         {talent.location && (
@@ -307,8 +287,21 @@ export default function TalentsPage({ talents, skills, filters }: TalentsPagePro
                                     )}
                                 </div>
                             </CardContent>
-                            <CardFooter className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">{renderStars(talent.average_rating)}</div>
+                            <CardFooter className="flex flex-1 items-end justify-between">
+                                <div className="flex items-center">
+                                    {[...Array(5)].map((_, i) => (
+                                        <StarIcon
+                                            key={i}
+                                            className={cn(
+                                                'h-4 w-4',
+                                                i < Math.floor(talent.average_rating)
+                                                    ? 'fill-yellow-400 text-yellow-400'
+                                                    : 'fill-gray-200 text-gray-200',
+                                            )}
+                                        />
+                                    ))}
+                                    <span className="ml-2 text-sm font-medium">{talent.average_rating.toFixed(1)}</span>
+                                </div>
                                 <div className="text-sm text-muted-foreground">{talent.completed_projects_count} proyek selesai</div>
                             </CardFooter>
                         </Card>

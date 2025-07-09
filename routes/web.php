@@ -2,12 +2,13 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\BusinessDashboardController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\TalentController;
 use App\Http\Controllers\WorkerDashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'home')->name("home");
+Route::get('/', [HomeController::class, 'index'])->name("home");
 
 Route::middleware('auth')->get("me", fn() => Response::json(auth()->user()));
 

@@ -24,15 +24,11 @@ export default function ListingDetail({ listing, similarListings }: ListingDetai
             {/* Header Section - Full Bleed */}
             <div className="relative w-full bg-gradient-to-b from-blue-900 to-blue-700 pt-24 shadow-xl shadow-blue-900/10">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#ffffff20_100%)] dark:bg-[linear-gradient(to_right,transparent_0%,#ffffff10_100%)]" />
-                <div className="container mx-auto px-6 py-8">
+                <div className="relative container mx-auto px-6 py-8">
                     {/* Back Button */}
-                    <Button
-                        variant="link"
-                        className={cn('relative mb-6 gap-2 !pl-0 text-blue-200 hover:text-white')}
-                        onClick={() => window.history.back()}
-                    >
+                    <Button variant="link" className={cn('mb-6 gap-2 !pl-0 text-blue-200 hover:text-white')} onClick={() => window.history.back()}>
                         <ArrowLeftIcon className="h-4 w-4" />
-                        Kembali ke Pencarian
+                        Kembali
                     </Button>
 
                     {/* Job Title & Company */}
@@ -82,7 +78,7 @@ export default function ListingDetail({ listing, similarListings }: ListingDetai
                 <div className="grid gap-6 lg:grid-cols-3">
                     {/* Main Content */}
                     <div className="lg:col-span-2">
-                        <Card className="bg-white/50 shadow-lg shadow-blue-900/5 backdrop-blur-sm dark:bg-neutral-900/50">
+                        <Card className="bg-white/50 py-0 shadow-lg shadow-blue-900/5 backdrop-blur-sm dark:bg-neutral-900/50">
                             <CardContent className="space-y-6 p-6">
                                 {/* Skills Required */}
                                 <div>
@@ -141,7 +137,7 @@ export default function ListingDetail({ listing, similarListings }: ListingDetai
                     <div className="space-y-6">
                         {/* Apply Button */}
                         <Card className="bg-white/50 shadow-lg shadow-blue-900/5 backdrop-blur-sm dark:bg-neutral-900/50">
-                            <CardContent className="pt-6">
+                            <CardContent>
                                 <Button className="w-full gap-2 bg-blue-600 hover:bg-blue-700" size="lg">
                                     <SendIcon className="h-4 w-4" />
                                     Kirim Lamaran
@@ -184,7 +180,7 @@ export default function ListingDetail({ listing, similarListings }: ListingDetai
                                     {similarListings.map((similarListing) => (
                                         <Card
                                             key={similarListing.id}
-                                            className="cursor-pointer transition-all hover:shadow-md"
+                                            className="cursor-pointer py-0 transition-all hover:shadow-md"
                                             onClick={() => router.get(route('listings.show', { listing: similarListing.id }))}
                                         >
                                             <CardContent className="space-y-3 p-4">
