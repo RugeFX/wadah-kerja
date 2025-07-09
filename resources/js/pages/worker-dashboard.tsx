@@ -1,11 +1,12 @@
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { BriefcaseIcon, InboxIcon, StarIcon, TrendingUpIcon, UserIcon } from 'lucide-react';
+
+import { formatIDR, getCurrentTimeOfDay } from '@/lib/utils';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { formatIDR, getCurrentTimeOfDay } from '@/lib/utils';
 import type { Listing, SharedData } from '@/types';
 
 interface WorkerDashboardProps {
@@ -123,52 +124,54 @@ export default function WorkerDashboard({ stats, recommendedListings }: WorkerDa
                     <CardContent>
                         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                             {recommendedListings.map((listing) => (
-                                <Card key={listing.id} className="group cursor-pointer transition-all hover:shadow-md">
-                                    <CardHeader>
-                                        <CardTitle className="line-clamp-2 text-lg">{listing.title}</CardTitle>
-                                        <div className="flex items-center justify-between">
-                                            <p className="text-sm font-medium text-muted-foreground">{listing.business_profile.company_name}</p>
-                                            <Badge
-                                                variant="outline"
-                                                className={
-                                                    listing.listing_type === 'PROJECT'
-                                                        ? 'border-orange-200 bg-orange-100 text-orange-700 hover:bg-orange-100'
-                                                        : 'border-purple-200 bg-purple-100 text-purple-700 hover:bg-purple-100'
-                                                }
-                                            >
-                                                {listing.listing_type === 'PROJECT' ? 'Proyek' : 'Per Jam'}
-                                            </Badge>
-                                        </div>
-                                    </CardHeader>
-                                    <CardContent className="space-y-4">
-                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                            <span>📍</span>
-                                            <span>{listing.business_profile.location}</span>
-                                        </div>
-
-                                        <div className="flex flex-wrap gap-2">
-                                            {listing.skills.map((skill) => (
-                                                <Badge key={skill.id} variant="secondary" className="bg-blue-100 text-blue-700 hover:bg-blue-100">
-                                                    {skill.name}
+                                <Link key={listing.id} href={route('listings.show', { listing: listing.id })}>
+                                    <Card className="group cursor-pointer transition-all hover:shadow-md">
+                                        <CardHeader>
+                                            <CardTitle className="line-clamp-2 text-lg">{listing.title}</CardTitle>
+                                            <div className="flex items-center justify-between">
+                                                <p className="text-sm font-medium text-muted-foreground">{listing.business_profile.company_name}</p>
+                                                <Badge
+                                                    variant="outline"
+                                                    className={
+                                                        listing.listing_type === 'PROJECT'
+                                                            ? 'border-orange-200 bg-orange-100 text-orange-700 hover:bg-orange-100'
+                                                            : 'border-purple-200 bg-purple-100 text-purple-700 hover:bg-purple-100'
+                                                    }
+                                                >
+                                                    {listing.listing_type === 'PROJECT' ? 'Proyek' : 'Per Jam'}
                                                 </Badge>
-                                            ))}
-                                        </div>
+                                            </div>
+                                        </CardHeader>
+                                        <CardContent className="space-y-4">
+                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                <span>📍</span>
+                                                <span>{listing.business_profile.location}</span>
+                                            </div>
 
-                                        <div className="flex items-baseline gap-1 font-medium">
-                                            {listing.listing_type === 'PROJECT' ? (
-                                                <>
-                                                    <span className="text-lg text-foreground">{formatIDR(listing.project_budget_min)}</span>
-                                                    <span className="text-muted-foreground">- {formatIDR(listing.project_budget_max)}</span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <span className="text-lg text-foreground">{formatIDR(listing.rate_amount)}</span>
-                                                    <span className="text-muted-foreground">/{listing.rate_type?.toLowerCase()}</span>
-                                                </>
-                                            )}
-                                        </div>
-                                    </CardContent>
-                                </Card>
+                                            <div className="flex flex-wrap gap-2">
+                                                {listing.skills.map((skill) => (
+                                                    <Badge key={skill.id} variant="secondary" className="bg-blue-100 text-blue-700 hover:bg-blue-100">
+                                                        {skill.name}
+                                                    </Badge>
+                                                ))}
+                                            </div>
+
+                                            <div className="flex items-baseline gap-1 font-medium">
+                                                {listing.listing_type === 'PROJECT' ? (
+                                                    <>
+                                                        <span className="text-lg text-foreground">{formatIDR(listing.project_budget_min)}</span>
+                                                        <span className="text-muted-foreground">- {formatIDR(listing.project_budget_max)}</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <span className="text-lg text-foreground">{formatIDR(listing.rate_amount)}</span>
+                                                        <span className="text-muted-foreground">/{listing.rate_type?.toLowerCase()}</span>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </Link>
                             ))}
                         </div>
                     </CardContent>
