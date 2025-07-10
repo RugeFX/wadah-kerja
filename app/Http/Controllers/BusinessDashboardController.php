@@ -2,48 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Listing;
-use App\Models\Proposal;
-use App\Models\Review;
+use Illuminate\Http\Request;
 use App\Models\WorkerProfile;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 
 class BusinessDashboardController extends Controller
 {
-    public function __invoke(): Response
+    /**
+     * Handle the incoming request.
+     */
+    public function __invoke(Request $request): Response
     {
-        $businessProfile = Auth::user()->businessProfile;
-
-        $listings = Listing::where('business_profile_id', $businessProfile->id);
-        $proposals = Proposal::whereIn('listing_id', $listings->pluck('id'));
-        $reviews = Review::whereIn('listing_id', $listings->pluck('id'));
-
-        $stats = [
-            'totalListings' => $listings->count(),
-            'openListings' => $listings->where('status', 'OPEN')->count(),
-            'inProgressListings' => $listings->where('status', 'IN_PROGRESS')->count(),
-            'completedListings' => $listings->where('status', 'COMPLETED')->count(),
-            'totalProposals' => $proposals->count(),
-            'totalReviews' => $reviews->count(),
-            'averageRating' => (float) $reviews->avg('rating') ?? 0,
-        ];
+        $businessProfile = $request->user()->businessProfile;
 
         $recentListings = $businessProfile->listings()
-            ->with(['proposals', 'skills', 'businessProfile'])
+            ->with(['skills', 'proposals'])
             ->latest()
             ->take(5)
             ->get();
 
-        $topApplicants = WorkerProfile::with(['user', 'skills'])
-            ->whereHas('proposals', function ($query) use ($businessProfile) {
-                $query->whereIn('listing_id', $businessProfile->listings()->pluck('id'));
+        $recentProposals = $businessProfile->listings()
+            ->with(['proposals.workerProfile.user', 'proposals.workerProfile.skills'])
+            ->whereHas('proposals')
+            ->get()
+            ->pluck('proposals')
+            ->flatten()
+            ->sortByDesc('created_at')
+            ->take(5)
+            ->values();
+
+        $topApplicants = WorkerProfile::query()
+            ->with(['user', 'skills'])
+            ->whereHas('proposals.listing', function ($query) use ($businessProfile) {
+                $query->where('business_profile_id', $businessProfile->id);
             })
             ->orderByDesc('average_rating')
-            ->orderByDesc('completed_projects_count')
             ->take(5)
             ->get();
 
-        return inertia('business-dashboard', compact("stats", "recentListings", "topApplicants"));
+        $stats = [
+            'totalListings' => $businessProfile->listings()->count(),
+            'openListings' => $businessProfile->listings()->where('status', 'OPEN')->count(),
+            'inProgressListings' => $businessProfile->listings()->where('status', 'IN_PROGRESS')->count(),
+            'completedListings' => $businessProfile->listings()->where('status', 'COMPLETED')->count(),
+            'totalProposals' => $businessProfile->listings()->withCount('proposals')->get()->sum('proposals_count'),
+            'totalReviews' => $businessProfile->listings()->withCount('reviews')->get()->sum('reviews_count'),
+            'averageRating' => $businessProfile->listings()->withCount('reviews')->get()->avg('reviews_count'),
+        ];
+
+        // dd(compact('businessProfile', 'stats', 'recentListings', 'recentProposals', 'topApplicants'));
+
+        return inertia('business-dashboard', compact('businessProfile', 'stats', 'recentListings', 'recentProposals', 'topApplicants'));
     }
 }

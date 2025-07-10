@@ -18,11 +18,11 @@ destination = "/var/www/html/storage"
 
 [env]
 APP_NAME = 'Wadah Kerja'
-APP_ENV = 'development'
-APP_DEBUG = true
+APP_ENV = 'production'
+APP_DEBUG = false
 APP_URL = 'https://wadah-kerja.fly.dev'
-# LOG_CHANNEL = 'stderr'
-# LOG_LEVEL = 'info'
+LOG_CHANNEL = 'stderr'
+LOG_LEVEL = 'info'
 LOG_STDERR_FORMATTER = 'Monolog\Formatter\JsonFormatter'
 SESSION_DRIVER = 'cookie'
 SESSION_SECURE_COOKIE = 'true'

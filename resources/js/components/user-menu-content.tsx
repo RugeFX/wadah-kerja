@@ -6,11 +6,11 @@ import { cn, getInitials } from '@/lib/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import type { Role, User } from '@/types';
+import type { Role, UserWithRelations } from '@/types';
 import { buttonVariants } from './ui/button';
 
 interface UserMenuContentProps {
-    user: User;
+    user: UserWithRelations;
     role: Role;
 }
 
@@ -27,12 +27,20 @@ export function UserMenuContent({ user, role }: UserMenuContentProps) {
             <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-3 px-3 py-3">
                     <Avatar className="size-10">
-                        <AvatarImage src={user.avatar} alt={user.name} />
+                        <AvatarImage
+                            src={
+                                role?.name === 'worker'
+                                    ? (user.worker_profile?.profile_picture_url ?? undefined)
+                                    : (user.business_profile?.profile_picture_url ?? undefined)
+                            }
+                            alt={user.name}
+                            className="object-contain"
+                        />
                         <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
                     </Avatar>
                     <div>
                         <div className="text-base font-semibold">{user.name}</div>
-                        <div className="text-sm font-medium text-muted-foreground">{user.email}</div>
+                        <div className="text-sm font-medium overflow-ellipsis text-muted-foreground">{user.email}</div>
                     </div>
                 </div>
             </DropdownMenuLabel>

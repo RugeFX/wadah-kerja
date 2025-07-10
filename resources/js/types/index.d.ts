@@ -23,14 +23,14 @@ export interface PaginationData<T> {
     total: number;
 }
 
-export type Auth<Authed = false> = Authed extends true
+export type Auth<Authed extends boolean = false> = Authed extends true
     ? {
-          user: User;
+          user: UserWithRelations;
           role: Role;
           isAuthenticated: true;
       }
     : {
-          user: User | null;
+          user: UserWithRelations | null;
           role: Role | null;
           isAuthenticated: boolean;
       };
@@ -65,7 +65,6 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    avatar?: string;
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
@@ -111,7 +110,12 @@ export interface WorkerProfile {
     completed_projects_count: number;
 }
 
-interface PortfolioItem {
+export interface UserWithRelations extends User {
+    worker_profile?: WorkerProfileWithRelations | null;
+    business_profile?: BusinessProfile | null;
+}
+
+export interface PortfolioItem {
     id: number;
     title: string;
     description: string;
@@ -134,7 +138,7 @@ export interface Proposal {
     created_at: string;
     updated_at: string;
     listing?: Listing;
-    worker_profile?: WorkerProfile;
+    worker_profile?: WorkerProfileWithRelations;
 }
 
 export interface BaseListing {
@@ -144,6 +148,8 @@ export interface BaseListing {
     description: string;
     status: 'OPEN' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
     location: string;
+    created_at: string;
+    updated_at: string;
     business_profile: BusinessProfile;
     skills: Skill[];
     proposals: Proposal[];

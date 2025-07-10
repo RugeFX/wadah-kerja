@@ -21,6 +21,8 @@ class Listing extends Model
     {
         return [
             'deadline' => 'date',
+            'start_datetime' => 'datetime',
+            'end_datetime' => 'datetime',
         ];
     }
 

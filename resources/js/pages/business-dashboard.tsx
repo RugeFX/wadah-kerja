@@ -1,5 +1,8 @@
-import { Head, usePage } from '@inertiajs/react';
-import { BriefcaseIcon, ClipboardIcon, ScrollTextIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
+import { cn, formatIDR } from '@/lib/utils';
+import { Head, router, usePage } from '@inertiajs/react';
+import { BriefcaseIcon, ChevronRightIcon, ClipboardIcon, ScrollTextIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
+
+import { getCurrentTimeOfDay } from '@/lib/utils';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -7,10 +10,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { UserInfo } from '@/components/user-info';
 import AppLayout from '@/layouts/app-layout';
-import { formatIDR, getCurrentTimeOfDay } from '@/lib/utils';
-import type { Listing, SharedData, WorkerProfileWithRelations } from '@/types';
+import type { BusinessProfile, Listing, Proposal, SharedData, WorkerProfileWithRelations } from '@/types';
 
 interface BusinessDashboardProps {
+    businessProfile: BusinessProfile;
+    recentListings: Listing[];
+    recentProposals: Proposal[];
+    topApplicants: WorkerProfileWithRelations[];
     stats: {
         totalListings: number;
         openListings: number;
@@ -20,11 +26,9 @@ interface BusinessDashboardProps {
         totalReviews: number;
         averageRating: number;
     };
-    recentListings: Listing[];
-    topApplicants: WorkerProfileWithRelations[];
 }
 
-export default function BusinessDashboard({ stats, recentListings, topApplicants }: BusinessDashboardProps) {
+export default function BusinessDashboard({ stats, recentListings, recentProposals, topApplicants }: BusinessDashboardProps) {
     const { auth } = usePage<SharedData<true>>().props;
 
     return (
@@ -32,8 +36,7 @@ export default function BusinessDashboard({ stats, recentListings, topApplicants
             <Head title="Dashboard Bisnis" />
 
             {/* Business Overview - Full Bleed */}
-            <div className="relative w-full bg-gradient-to-b from-blue-900 to-blue-700 pt-24 shadow-xl shadow-blue-900/10">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#ffffff20_100%)] dark:bg-[linear-gradient(to_right,transparent_0%,#ffffff10_100%)]" />
+            <div className="w-full bg-blue-800 pt-24 shadow-md">
                 <div className="container mx-auto px-6 py-8">
                     {/* User Greeting */}
                     <div className="mb-8">
@@ -77,7 +80,7 @@ export default function BusinessDashboard({ stats, recentListings, topApplicants
             <div className="container mx-auto flex h-full flex-1 flex-col gap-6 px-6 py-8">
                 {/* Listing Statistics */}
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    <Card className="col-span-2 bg-white/50 shadow-lg shadow-blue-900/5 backdrop-blur-sm dark:bg-neutral-900/50">
+                    <Card className="col-span-2 shadow-md">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <BriefcaseIcon className="h-5 w-5 text-blue-500" />
@@ -87,7 +90,7 @@ export default function BusinessDashboard({ stats, recentListings, topApplicants
                         <CardContent>
                             <div className="relative mt-4">
                                 <div className="absolute -inset-2">
-                                    <div className="h-full w-full rounded-3xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 opacity-50 blur-lg" />
+                                    <div className="h-full w-full rounded-3xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-green-500/20 opacity-50 blur-lg" />
                                 </div>
                                 <div className="relative grid gap-4 rounded-2xl border bg-card p-4 sm:grid-cols-3">
                                     <div className="flex flex-col items-center gap-2 rounded-xl bg-blue-500/10 p-4">
@@ -114,7 +117,7 @@ export default function BusinessDashboard({ stats, recentListings, topApplicants
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-white/50 shadow-lg shadow-blue-900/5 backdrop-blur-sm dark:bg-neutral-900/50">
+                    <Card className="shadow-md">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <StarIcon className="h-5 w-5 text-yellow-500" />
@@ -143,6 +146,13 @@ export default function BusinessDashboard({ stats, recentListings, topApplicants
                                         <ScrollTextIcon className="h-4 w-4 text-blue-500" />
                                         <span className="text-sm text-muted-foreground">Lamaran diterima</span>
                                     </div>
+                                    <Button
+                                        variant="link"
+                                        className="mt-2 h-auto p-0 text-blue-600"
+                                        onClick={() => router.visit(route('business.proposals.index'))}
+                                    >
+                                        Lihat Semua Proposal
+                                    </Button>
                                 </div>
                             </div>
                         </CardContent>
@@ -150,93 +160,159 @@ export default function BusinessDashboard({ stats, recentListings, topApplicants
                 </div>
 
                 {/* Recent Listings */}
-                <Card className="bg-white/50 shadow-lg shadow-blue-900/5 backdrop-blur-sm dark:bg-neutral-900/50">
-                    <CardHeader>
-                        <div className="flex items-center justify-between">
-                            <CardTitle className="flex items-center gap-2">
-                                <ClipboardIcon className="h-5 w-5 text-blue-500" />
-                                Lowongan Terbaru
-                            </CardTitle>
-                            <Button variant="default" size="lg">
-                                Buat Lowongan Baru
-                            </Button>
-                        </div>
+                <Card className="shadow-md">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                        <CardTitle className="flex items-center gap-2">
+                            <ClipboardIcon className="h-5 w-5 text-blue-500" />
+                            Lowongan Terbaru
+                        </CardTitle>
+                        <Button variant="default" size="lg" onClick={() => router.visit(route('business.listings.create'))}>
+                            Buat Lowongan Baru
+                        </Button>
                     </CardHeader>
                     <CardContent>
-                        <div className="rounded-xl border shadow-sm">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow className="bg-muted/50">
-                                        <TableHead>Judul</TableHead>
-                                        <TableHead>Tipe</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead>Anggaran/Rate</TableHead>
-                                        <TableHead>Lamaran</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {recentListings.map((listing) => (
-                                        <TableRow key={listing.id}>
-                                            <TableCell className="min-w-52">
-                                                <div className="space-y-1">
-                                                    <div className="font-medium">{listing.title}</div>
-                                                    <div className="text-sm text-muted-foreground">{listing.business_profile.location}</div>
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
+                        {recentListings.length > 0 ? (
+                            <div className="space-y-4">
+                                {recentListings.map((listing) => (
+                                    <div
+                                        key={listing.id}
+                                        className="flex items-center justify-between rounded-lg border p-3 transition-all hover:bg-muted/50"
+                                        onClick={() => router.visit(route('business.listings.show', { listing: listing.id }))}
+                                        role="button"
+                                    >
+                                        <div className="space-y-1">
+                                            <p className="font-medium">{listing.title}</p>
+                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                                 <Badge
                                                     variant="outline"
-                                                    className={
-                                                        listing.listing_type === 'PROJECT'
-                                                            ? 'border-orange-200 bg-orange-100 text-orange-700 hover:bg-orange-100'
-                                                            : 'border-purple-200 bg-purple-100 text-purple-700 hover:bg-purple-100'
-                                                    }
+                                                    className={cn(
+                                                        listing.status === 'OPEN' && 'border-blue-200 bg-blue-100 text-blue-700 hover:bg-blue-100',
+                                                        listing.status === 'IN_PROGRESS' &&
+                                                            'border-purple-200 bg-purple-100 text-purple-700 hover:bg-purple-100',
+                                                        listing.status === 'COMPLETED' &&
+                                                            'border-green-200 bg-green-100 text-green-700 hover:bg-green-100',
+                                                        listing.status === 'CANCELLED' && 'border-red-200 bg-red-100 text-red-700 hover:bg-red-100',
+                                                    )}
                                                 >
-                                                    {listing.listing_type === 'PROJECT' ? 'Proyek' : 'Per Jam'}
+                                                    {listing.status === 'OPEN' && 'Tersedia'}
+                                                    {listing.status === 'IN_PROGRESS' && 'Sedang Berjalan'}
+                                                    {listing.status === 'COMPLETED' && 'Selesai'}
+                                                    {listing.status === 'CANCELLED' && 'Dibatalkan'}
                                                 </Badge>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge
-                                                    variant="outline"
-                                                    className={
-                                                        listing.status === 'OPEN'
-                                                            ? 'border-blue-200 bg-blue-100 text-blue-700 hover:bg-blue-100'
-                                                            : listing.status === 'IN_PROGRESS'
-                                                              ? 'border-purple-200 bg-purple-100 text-purple-700 hover:bg-purple-100'
-                                                              : 'border-green-200 bg-green-100 text-green-700 hover:bg-green-100'
-                                                    }
-                                                >
-                                                    {listing.status === 'OPEN'
-                                                        ? 'Tersedia'
-                                                        : listing.status === 'IN_PROGRESS'
-                                                          ? 'Berjalan'
-                                                          : 'Selesai'}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell className="font-medium">
-                                                {listing.listing_type === 'PROJECT' ? (
-                                                    <div className="space-y-1">
-                                                        <div>{formatIDR(listing.project_budget_min)}</div>
-                                                        <div className="text-sm text-muted-foreground">- {formatIDR(listing.project_budget_max)}</div>
-                                                    </div>
-                                                ) : (
-                                                    <div className="space-y-1">
-                                                        <div>{formatIDR(listing.rate_amount)}</div>
-                                                        <div className="text-sm text-muted-foreground">/{listing.rate_type?.toLowerCase()}</div>
-                                                    </div>
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                <div className="flex items-center gap-2">
-                                                    <UsersIcon className="h-4 w-4 text-muted-foreground" />
-                                                    <span>{listing.proposals?.length ?? 0}</span>
+                                                <span>•</span>
+                                                <span>
+                                                    {listing.listing_type === 'PROJECT'
+                                                        ? `${formatIDR(listing.project_budget_min)} - ${formatIDR(listing.project_budget_max)}`
+                                                        : `${formatIDR(listing.rate_amount)}/${listing.rate_type?.toLowerCase()}`}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Badge variant="secondary">{listing.proposals?.length || 0} Proposal</Badge>
+                                            <ChevronRightIcon className="h-5 w-5 text-muted-foreground" />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-6 text-center">
+                                <div className="rounded-full bg-blue-100 p-3 text-blue-600">
+                                    <ClipboardIcon className="h-6 w-6" />
+                                </div>
+                                <h3 className="mt-4 text-lg font-medium">Belum ada lowongan</h3>
+                                <p className="mt-2 text-sm text-muted-foreground">
+                                    Buat lowongan baru untuk mulai mencari pekerja yang sesuai dengan kebutuhan Anda.
+                                </p>
+                                <Button className="mt-4" onClick={() => router.visit(route('business.listings.create'))}>
+                                    Buat Lowongan Baru
+                                </Button>
+                            </div>
+                        )}
+                        {recentListings.length > 0 && (
+                            <div className="mt-4 flex justify-center">
+                                <Button variant="outline" onClick={() => router.visit(route('business.listings.index'))}>
+                                    Lihat Semua Lowongan
+                                </Button>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+
+                {/* Recent Proposals */}
+                <Card className="shadow-md">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                        <CardTitle className="flex items-center gap-2">
+                            <ScrollTextIcon className="h-5 w-5 text-blue-500" />
+                            Proposal Terbaru
+                        </CardTitle>
+                        <Button variant="outline" size="lg" onClick={() => router.visit(route('business.proposals.index'))}>
+                            Lihat Semua Proposal
+                        </Button>
+                    </CardHeader>
+                    <CardContent>
+                        {recentProposals.length > 0 ? (
+                            <div className="space-y-4">
+                                {recentProposals.map((proposal) => (
+                                    <div
+                                        key={proposal.id}
+                                        className="flex items-center justify-between rounded-lg border p-3 transition-all hover:bg-muted/50"
+                                        onClick={() => router.visit(route('business.proposals.show', { proposal: proposal.id }))}
+                                        role="button"
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className="h-10 w-10 overflow-hidden rounded-full">
+                                                <img
+                                                    src={proposal.worker_profile?.profile_picture_url || '/images/default-avatar.png'}
+                                                    alt={proposal.worker_profile?.user?.name || 'Worker'}
+                                                    className="h-full w-full object-cover"
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <p className="font-medium">{proposal.worker_profile?.user?.name || 'Worker'}</p>
+                                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                    <span>{proposal.listing?.title || 'Listing'}</span>
+                                                    <span>•</span>
+                                                    <Badge
+                                                        variant="outline"
+                                                        className={cn(
+                                                            proposal.status === 'SENT' &&
+                                                                'border-blue-200 bg-blue-100 text-blue-700 hover:bg-blue-100',
+                                                            proposal.status === 'VIEWED' &&
+                                                                'border-purple-200 bg-purple-100 text-purple-700 hover:bg-purple-100',
+                                                            proposal.status === 'ACCEPTED' &&
+                                                                'border-green-200 bg-green-100 text-green-700 hover:bg-green-100',
+                                                            proposal.status === 'REJECTED' &&
+                                                                'border-red-200 bg-red-100 text-red-700 hover:bg-red-100',
+                                                        )}
+                                                    >
+                                                        {proposal.status === 'SENT' && 'Terkirim'}
+                                                        {proposal.status === 'VIEWED' && 'Dilihat'}
+                                                        {proposal.status === 'ACCEPTED' && 'Diterima'}
+                                                        {proposal.status === 'REJECTED' && 'Ditolak'}
+                                                    </Badge>
                                                 </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                            </div>
+                                        </div>
+                                        <ChevronRightIcon className="h-5 w-5 text-muted-foreground" />
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-6 text-center">
+                                <div className="rounded-full bg-blue-100 p-3 text-blue-600">
+                                    <ScrollTextIcon className="h-6 w-6" />
+                                </div>
+                                <h3 className="mt-4 text-lg font-medium">Belum ada proposal</h3>
+                                <p className="mt-2 text-sm text-muted-foreground">Anda belum menerima proposal untuk lowongan Anda.</p>
+                            </div>
+                        )}
+                        {recentProposals.length > 0 && (
+                            <div className="mt-4 flex justify-center">
+                                <Button variant="outline" onClick={() => router.visit(route('business.proposals.index'))}>
+                                    Lihat Semua Proposal
+                                </Button>
+                            </div>
+                        )}
                     </CardContent>
                 </Card>
 

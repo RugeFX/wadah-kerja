@@ -44,7 +44,7 @@ class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'auth' => [
                 'isAuthenticated' => $user !== null,
-                'user' => $user,
+                'user' => $user?->load('workerProfile', 'businessProfile'),
                 'role' => $user?->roles->first()?->only('id', 'name'),
             ],
             'ziggy' => fn(): array => [
