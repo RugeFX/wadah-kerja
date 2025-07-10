@@ -4,13 +4,13 @@ import { LayoutDashboardIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { buttonVariants } from '@/components/ui/button';
 import { cn, getInitials } from '@/lib/utils';
-import type { Role, User } from '@/types';
+import type { Role, UserWithRelations } from '@/types';
 
 interface MobileMenuProps {
     isOpen: boolean;
     onClose: () => void;
     isAuthenticated: boolean;
-    user: User | null;
+    user: UserWithRelations | null;
     role: Role | null;
 }
 
@@ -50,7 +50,14 @@ export function MobileMenu({ isOpen, onClose, isAuthenticated, user, role }: Mob
                     <div className="space-y-4">
                         <div className="flex items-center gap-3 px-3">
                             <Avatar className="size-10">
-                                <AvatarImage src={user.avatar} alt={user.name} />
+                                <AvatarImage
+                                    src={
+                                        role?.name === 'worker'
+                                            ? (user.worker_profile?.profile_picture_url ?? undefined)
+                                            : (user.business_profile?.profile_picture_url ?? undefined)
+                                    }
+                                    alt={user.name}
+                                />
                                 <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
                             </Avatar>
                             <div>

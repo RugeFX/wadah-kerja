@@ -81,25 +81,10 @@ COPY --from=base /var/www/html/vendor /app/vendor
 # lock file we might find. Defaults to
 # NPM if no lock file is found.
 # Note: We run "production" for Mix and "build" for Vite
-RUN if [ -f "vite.config.js" -o -f "vite.config.ts" ]; then \
-    ASSET_CMD="build"; \
-    else \
-    ASSET_CMD="production"; \
-    fi; \
-    if [ -f "yarn.lock" ]; then \
-    yarn install --frozen-lockfile; \
-    yarn $ASSET_CMD; \
-    elif [ -f "pnpm-lock.yaml" ]; then \
+RUN ASSET_CMD="build:ssr"; \
     corepack enable && corepack prepare pnpm@latest-8 --activate; \
     pnpm install --frozen-lockfile; \
-    pnpm run $ASSET_CMD; \
-    elif [ -f "package-lock.json" ]; then \
-    npm ci --no-audit; \
-    npm run $ASSET_CMD; \
-    else \
-    npm install; \
-    npm run $ASSET_CMD; \
-    fi;
+    pnpm run $ASSET_CMD;
 
 # From our base container created above, we
 # create our final image, adding in static
